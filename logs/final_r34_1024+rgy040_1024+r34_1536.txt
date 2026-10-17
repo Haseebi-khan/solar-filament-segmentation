@@ -1,0 +1,16 @@
+== blend weights (t_seed 0.6, t_mask 0.6, link 8, fill holes; best area/score filter)
+weights 1 1 1:     0.6     0.6     8     -1  mean       100       0.88 0.430001 4490
+weights 1 1 2:     0.6     0.6     8     -1  mean       200       0.88 0.430588 4553
+weights 0 1 2:     0.6     0.6     8     -1  mean       100        0.9 0.42992 4380
+weights 1 0 2:     0.6     0.6     8     -1  mean       200        0.9 0.428887 4452
+weights 0 0 1:     0.6     0.6     8     -1  mean       100       0.92 0.430751 4377
+== final: members r34_1024 rgy040_1024 r34_1536  weights 1 1 2
+candidates 5645  N_gt 8199  PQ(all candidates) 0.4006  oracle PQ 0.4920
+nested-CV rescorer: PQ 0.4381 at threshold 0.2
+  reference: threshold on mean prob only -> PQ 0.4308 at 0.895
+  reference: threshold on p90 prob only -> PQ 0.4311 at 0.995
+feature gain: mean 2162, p90 1402, p_ring 903, core80 701, nn_dist 351, contrast 305, bbox_h 263, ring_p30 233, max 227, length 226
+saved /root/kaggle/work/rescorers/r34_1024+rgy040_1024+r34_1536.pkl
+[OOF, rescorer in-sample] wrote /root/kaggle/work/oof_sub_r34_1024+rgy040_1024+r34_1536.csv: 4238 filaments over 695/707 images
+[OOF, rescorer in-sample] OOF score from CSV: PQ=0.4506 SQ=0.6768 RQ=0.6657 TP=5011 FP=1844 FN=3188
+wrote /root/kaggle/submissions/submission.csv: 1050 filaments over 177/180 images

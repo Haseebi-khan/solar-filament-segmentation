@@ -1,0 +1,15 @@
+{
+ "t_seed": 0.6,
+ "t_mask": 0.6,
+ "min_area": 100,
+ "min_score": 0.0,
+ "score": "mean",
+ "link": 8,
+ "close": -1,
+ "rescorer": "/root/kaggle/work/rescorers/r34_1024+rgy040_1024+r34_1536.pkl",
+ "weights": [
+  1.0,
+  1.0,
+  2.0
+ ]
+}
