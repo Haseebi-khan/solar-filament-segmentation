@@ -37,3 +37,28 @@ epoch 33/60  loss 0.3580  lr 2.26e-04  267s
 epoch 34/60  loss 0.3599  lr 2.12e-04  275s
 epoch 35/60  loss 0.3624  lr 1.99e-04  282s
 epoch 36/60  loss 0.3534  lr 1.86e-04  289s
+epoch 37/60  loss 0.3534  lr 1.73e-04  297s
+epoch 38/60  loss 0.3566  lr 1.61e-04  304s
+epoch 39/60  loss 0.3542  lr 1.49e-04  311s
+epoch 40/60  loss 0.3515  lr 1.37e-04  319s  pq@0.3 0.3360  pq@0.4 0.3400  pq@0.5 0.3450
+epoch 41/60  loss 0.3509  lr 1.25e-04  348s
+epoch 42/60  loss 0.3501  lr 1.14e-04  355s
+epoch 43/60  loss 0.3576  lr 1.03e-04  362s
+epoch 44/60  loss 0.3440  lr 9.23e-05  370s
+epoch 45/60  loss 0.3498  lr 8.23e-05  377s
+epoch 46/60  loss 0.3458  lr 7.28e-05  384s
+epoch 47/60  loss 0.3489  lr 6.39e-05  392s
+epoch 48/60  loss 0.3541  lr 5.55e-05  399s
+epoch 49/60  loss 0.3467  lr 4.76e-05  406s
+epoch 50/60  loss 0.3441  lr 4.04e-05  414s
+epoch 51/60  loss 0.3439  lr 3.38e-05  421s
+epoch 52/60  loss 0.3432  lr 2.79e-05  428s
+epoch 53/60  loss 0.3504  lr 2.26e-05  436s
+epoch 54/60  loss 0.3414  lr 1.80e-05  443s
+epoch 55/60  loss 0.3427  lr 1.40e-05  450s
+epoch 56/60  loss 0.3411  lr 1.08e-05  458s
+epoch 57/60  loss 0.3393  lr 8.26e-06  465s
+epoch 58/60  loss 0.3425  lr 6.45e-06  472s
+epoch 59/60  loss 0.3358  lr 5.36e-06  480s
+epoch 60/60  loss 0.3374  lr 5.00e-06  487s  pq@0.3 0.3499  pq@0.4 0.3552  pq@0.5 0.3596
+saved fold4.pt  total time 509s

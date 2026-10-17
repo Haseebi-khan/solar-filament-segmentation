@@ -1,0 +1,29 @@
+{"name": "r34_1536", "fold": 3, "arch": "unet", "encoder": "resnet34", "size": 1536, "crop": 0, "epochs": 80, "bs": 8, "lr": 0.0005, "wd": 0.0001, "warmup": 2.0, "ema": 0.998, "dice_weight": 1.0, "no_rotate": false, "uniform_sampling": false, "eval_every": 20, "seed": 0}
+train images 566  val images 141  size 1536
+steps/epoch 71  total steps 5680
+epoch 1/80  loss 1.4063  lr 2.54e-04  41s
+epoch 2/80  loss 1.1234  lr 5.00e-04  70s
+epoch 3/80  loss 0.8076  lr 5.00e-04  100s
+epoch 4/80  loss 0.5572  lr 4.99e-04  129s
+epoch 5/80  loss 0.4574  lr 4.98e-04  158s
+epoch 6/80  loss 0.4263  lr 4.97e-04  187s
+epoch 7/80  loss 0.4098  lr 4.95e-04  216s
+epoch 8/80  loss 0.3998  lr 4.93e-04  245s
+epoch 9/80  loss 0.3937  lr 4.90e-04  274s
+epoch 10/80  loss 0.3936  lr 4.87e-04  303s
+epoch 11/80  loss 0.3902  lr 4.84e-04  332s
+epoch 12/80  loss 0.3716  lr 4.80e-04  362s
+epoch 13/80  loss 0.3804  lr 4.76e-04  391s
+epoch 14/80  loss 0.3699  lr 4.72e-04  420s
+epoch 15/80  loss 0.3872  lr 4.67e-04  449s
+epoch 16/80  loss 0.3746  lr 4.62e-04  478s
+epoch 17/80  loss 0.3732  lr 4.56e-04  507s
+epoch 18/80  loss 0.3677  lr 4.50e-04  536s
+epoch 19/80  loss 0.3589  lr 4.44e-04  565s
+epoch 20/80  loss 0.3599  lr 4.38e-04  593s  pq@0.3 0.3509  pq@0.4 0.3550  pq@0.5 0.3580
+epoch 21/80  loss 0.3574  lr 4.31e-04  657s
+epoch 22/80  loss 0.3604  lr 4.24e-04  686s
+epoch 23/80  loss 0.3633  lr 4.17e-04  715s
+epoch 24/80  loss 0.3616  lr 4.09e-04  744s
+epoch 25/80  loss 0.3694  lr 4.01e-04  773s
+epoch 26/80  loss 0.3692  lr 3.93e-04  802s
