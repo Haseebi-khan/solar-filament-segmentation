@@ -45,3 +45,12 @@ epoch 41/60  loss 0.3543  lr 1.25e-04  555s
 epoch 42/60  loss 0.3512  lr 1.14e-04  567s
 epoch 43/60  loss 0.3491  lr 1.03e-04  580s
 epoch 44/60  loss 0.3422  lr 9.23e-05  592s
+epoch 45/60  loss 0.3454  lr 8.23e-05  605s
+epoch 46/60  loss 0.3474  lr 7.28e-05  617s
+epoch 47/60  loss 0.3475  lr 6.39e-05  630s
+epoch 48/60  loss 0.3391  lr 5.55e-05  642s
+epoch 49/60  loss 0.3429  lr 4.76e-05  655s
+epoch 50/60  loss 0.3421  lr 4.04e-05  667s
+epoch 51/60  loss 0.3418  lr 3.38e-05  680s
+epoch 52/60  loss 0.3417  lr 2.79e-05  692s
+epoch 53/60  loss 0.3409  lr 2.26e-05  704s
