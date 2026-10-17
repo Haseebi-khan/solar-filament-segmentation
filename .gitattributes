@@ -1,0 +1,4 @@
+# Model checkpoints (~100 MB each) and rescorers are stored with Git LFS
+*.pt filter=lfs diff=lfs merge=lfs -text
+*.pth filter=lfs diff=lfs merge=lfs -text
+work/rescorers/*.pkl filter=lfs diff=lfs merge=lfs -text

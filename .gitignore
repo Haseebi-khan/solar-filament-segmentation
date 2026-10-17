@@ -1,0 +1,35 @@
+# Python environments
+.venv/
+.venv-tools/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Competition data and downloads (CC BY-NC 4.0, re-downloadable from Kaggle)
+data/
+external/
+*.zip
+
+# Bulky regenerable artefacts: decoded image cache (~6 GB) and probability maps (~15 GB)
+work/cache/
+work/preds/
+*.npy
+*.npz
+*.parquet
+
+# Tracked results: model weights (work/models, via Git LFS, see .gitattributes),
+# rescorers (work/rescorers), training logs, submissions/*.csv, final scores (logs/final_*.txt).
+# Raw stdout of runs is noisy (warnings) and duplicated in work/models/*/fold*.log:
+logs/*
+!logs/final_*.txt
+!logs/ablations.txt
+
+# Credentials (the Kaggle token lives in ~/.kaggle, never in the repo)
+kaggle.json
+access_token
+.env
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
