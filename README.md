@@ -46,6 +46,9 @@ scored by Panoptic Quality (PQ) against every annotator separately.
 
 ## Reproduce
 
+Full instructions (environment, Kaggle token, dataset download, step-by-step runs, submitting
+from the released weights, troubleshooting) are in [SETUP.md](SETUP.md). Short version:
+
 ```bash
 python -m venv .venv && .venv/bin/pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm7.2
 export FILSEG_DATA=/path/to/MAGFiLO_1.0_Kaggle_2026 FILSEG_WORK=$PWD/work

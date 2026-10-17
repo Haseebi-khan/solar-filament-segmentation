@@ -2,7 +2,12 @@
 #   pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/rocm7.2
 # On NVIDIA GPUs use torch==2.14.1 / torchvision==0.29.1 from the default index instead.
 huggingface_hub==2.2.0
+ipykernel==7.4.0
+kaggle==2.2.4
 lightgbm==4.7.0
+matplotlib==3.11.2
+nbconvert==7.17.2
+nbformat==5.11.1
 numpy==2.5.2
 opencv-python-headless==5.0.0.93
 pandas==3.0.6

@@ -54,3 +54,11 @@ epoch 50/60  loss 0.3421  lr 4.04e-05  667s
 epoch 51/60  loss 0.3418  lr 3.38e-05  680s
 epoch 52/60  loss 0.3417  lr 2.79e-05  692s
 epoch 53/60  loss 0.3409  lr 2.26e-05  704s
+epoch 54/60  loss 0.3398  lr 1.80e-05  717s
+epoch 55/60  loss 0.3369  lr 1.40e-05  729s
+epoch 56/60  loss 0.3359  lr 1.08e-05  742s
+epoch 57/60  loss 0.3374  lr 8.26e-06  754s
+epoch 58/60  loss 0.3427  lr 6.45e-06  767s
+epoch 59/60  loss 0.3390  lr 5.36e-06  779s
+epoch 60/60  loss 0.3330  lr 5.00e-06  792s  pq@0.3 0.3550  pq@0.4 0.3616  pq@0.5 0.3622
+saved fold3.pt  total time 813s
