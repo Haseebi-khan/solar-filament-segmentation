@@ -1,0 +1,18 @@
+== blend weights for r34_1024 rgy040_1024 r34_1536 r34_2048 effv2s_1536 (t_seed 0.6, t_mask 0.6, link 8, fill holes; best area/score filter, no selector)
+weights 1 1 2 0 0:     0.6     0.6     8     -1  mean         0        0.9 0.430793 4310
+weights 1 1 2 2 0:     0.6     0.6     8     -1  mean         0        0.9 0.433845 4427
+weights 1 1 2 0 2:     0.6     0.6     8     -1  mean       200       0.88 0.436357 4492
+weights 1 1 2 2 2:     0.6     0.6     8     -1  mean       200       0.88 0.435741 4531
+weights 0 0 1 1 1:     0.6     0.6     8     -1  mean       200        0.9 0.435831 4429
+weights 0 0 1 2 1:     0.6     0.6     8     -1  mean       200        0.9 0.436256 4464
+weights 1 1 1 1 1:     0.6     0.6     8     -1  mean       200       0.88 0.435511 4493
+weights 0 0 0 1 1:     0.6     0.6     8     -1  mean       200        0.9 0.436912 4477
+pick the best weights (last-but-one column is PQ) and rerun with WEIGHTS="..."
+== v2 final: members r34_1024 rgy040_1024 r34_1536 r34_2048 effv2s_1536  weights 0 0 0 1 1  morph 0
+filaments 5530  hypotheses 22092  levels [0.4, 0.5, 0.6, 0.7]  N_gt 8199
+oracle (true u): v1 extent only 0.4972   best level per filament 0.5139
+nested CV, v1 extent only: PQ 0.4433 at threshold 0.22
+nested CV, v2 selector:    PQ 0.4438 at threshold 0.22   (+0.0004 vs v1 extent)
+levels chosen for kept filaments: 0.4: 1602, 0.5: 1142, 0.6: 896, 0.7: 824
+feature gain: base_mean 9269, base_core80 3797, base_p90 2362, p_ring 1887, nn_dist 1351, contrast 1002, bbox_h 950, p90 836, max 615, base_log_area 581, fill 556, i_ring 555
+saved /root/kaggle/work/selectors_v2/r34_1024+rgy040_1024+r34_1536+r34_2048+effv2s_1536.pkl and /root/kaggle/work/selectors_v2/r34_1024+rgy040_1024+r34_1536+r34_2048+effv2s_1536_config.json
