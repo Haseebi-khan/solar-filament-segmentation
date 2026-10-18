@@ -1,0 +1,84 @@
+{"name": "r34_2048", "fold": 2, "arch": "unet", "encoder": "resnet34", "size": 2048, "crop": 0, "epochs": 80, "bs": 8, "lr": 0.0005, "wd": 0.0001, "warmup": 2.0, "ema": 0.998, "dice_weight": 1.0, "no_rotate": false, "uniform_sampling": false, "eval_every": 20, "seed": 0}
+train images 566  val images 141  size 2048
+steps/epoch 71  total steps 5680
+epoch 1/80  loss 1.4051  lr 2.54e-04  40s
+epoch 2/80  loss 1.1220  lr 5.00e-04  68s
+epoch 3/80  loss 0.8338  lr 5.00e-04  114s
+epoch 4/80  loss 0.5663  lr 4.99e-04  167s
+epoch 5/80  loss 0.4575  lr 4.98e-04  217s
+epoch 6/80  loss 0.4290  lr 4.97e-04  266s
+epoch 7/80  loss 0.4099  lr 4.95e-04  317s
+epoch 8/80  loss 0.3951  lr 4.93e-04  368s
+epoch 9/80  loss 0.3978  lr 4.90e-04  418s
+epoch 10/80  loss 0.3946  lr 4.87e-04  469s
+epoch 11/80  loss 0.3933  lr 4.84e-04  519s
+epoch 12/80  loss 0.3938  lr 4.80e-04  570s
+epoch 13/80  loss 0.3766  lr 4.76e-04  621s
+epoch 14/80  loss 0.3874  lr 4.72e-04  671s
+epoch 15/80  loss 0.3852  lr 4.67e-04  722s
+epoch 16/80  loss 0.3785  lr 4.62e-04  772s
+epoch 17/80  loss 0.3696  lr 4.56e-04  823s
+epoch 18/80  loss 0.3702  lr 4.50e-04  874s
+epoch 19/80  loss 0.3726  lr 4.44e-04  924s
+epoch 20/80  loss 0.3673  lr 4.38e-04  975s  pq@0.3 0.3243  pq@0.4 0.3251  pq@0.5 0.3263
+epoch 21/80  loss 0.3640  lr 4.31e-04  1144s
+epoch 22/80  loss 0.3529  lr 4.24e-04  1194s
+epoch 23/80  loss 0.3748  lr 4.17e-04  1244s
+epoch 24/80  loss 0.3697  lr 4.09e-04  1295s
+epoch 25/80  loss 0.3563  lr 4.01e-04  1345s
+epoch 26/80  loss 0.3675  lr 3.93e-04  1395s
+epoch 27/80  loss 0.3658  lr 3.85e-04  1446s
+epoch 28/80  loss 0.3673  lr 3.76e-04  1496s
+epoch 29/80  loss 0.3572  lr 3.68e-04  1546s
+epoch 30/80  loss 0.3654  lr 3.59e-04  1597s
+epoch 31/80  loss 0.3647  lr 3.50e-04  1647s
+epoch 32/80  loss 0.3669  lr 3.40e-04  1697s
+epoch 33/80  loss 0.3557  lr 3.31e-04  1748s
+epoch 34/80  loss 0.3524  lr 3.21e-04  1798s
+epoch 35/80  loss 0.3597  lr 3.12e-04  1848s
+epoch 36/80  loss 0.3550  lr 3.02e-04  1899s
+epoch 37/80  loss 0.3541  lr 2.92e-04  1949s
+epoch 38/80  loss 0.3423  lr 2.82e-04  2000s
+epoch 39/80  loss 0.3477  lr 2.72e-04  2050s
+epoch 40/80  loss 0.3431  lr 2.62e-04  2100s  pq@0.3 0.3548  pq@0.4 0.3553  pq@0.5 0.3557
+epoch 41/80  loss 0.3450  lr 2.53e-04  2204s
+epoch 42/80  loss 0.3457  lr 2.43e-04  2254s
+epoch 43/80  loss 0.3376  lr 2.33e-04  2305s
+epoch 44/80  loss 0.3340  lr 2.23e-04  2355s
+epoch 45/80  loss 0.3396  lr 2.13e-04  2406s
+epoch 46/80  loss 0.3409  lr 2.03e-04  2456s
+epoch 47/80  loss 0.3329  lr 1.93e-04  2507s
+epoch 48/80  loss 0.3429  lr 1.84e-04  2558s
+epoch 49/80  loss 0.3337  lr 1.74e-04  2608s
+epoch 50/80  loss 0.3409  lr 1.65e-04  2659s
+epoch 51/80  loss 0.3388  lr 1.55e-04  2709s
+epoch 52/80  loss 0.3340  lr 1.46e-04  2760s
+epoch 53/80  loss 0.3394  lr 1.37e-04  2810s
+epoch 54/80  loss 0.3379  lr 1.29e-04  2861s
+epoch 55/80  loss 0.3246  lr 1.20e-04  2911s
+epoch 56/80  loss 0.3312  lr 1.12e-04  2962s
+epoch 57/80  loss 0.3316  lr 1.04e-04  3012s
+epoch 58/80  loss 0.3315  lr 9.60e-05  3063s
+epoch 59/80  loss 0.3361  lr 8.84e-05  3113s
+epoch 60/80  loss 0.3231  lr 8.11e-05  3164s  pq@0.3 0.3643  pq@0.4 0.3660  pq@0.5 0.3672
+epoch 61/80  loss 0.3278  lr 7.40e-05  3267s
+epoch 62/80  loss 0.3213  lr 6.72e-05  3318s
+epoch 63/80  loss 0.3220  lr 6.08e-05  3368s
+epoch 64/80  loss 0.3295  lr 5.46e-05  3418s
+epoch 65/80  loss 0.3260  lr 4.88e-05  3469s
+epoch 66/80  loss 0.3244  lr 4.33e-05  3519s
+epoch 67/80  loss 0.3296  lr 3.82e-05  3569s
+epoch 68/80  loss 0.3287  lr 3.33e-05  3620s
+epoch 69/80  loss 0.3292  lr 2.89e-05  3670s
+epoch 70/80  loss 0.3247  lr 2.48e-05  3721s
+epoch 71/80  loss 0.3261  lr 2.11e-05  3771s
+epoch 72/80  loss 0.3276  lr 1.77e-05  3821s
+epoch 73/80  loss 0.3237  lr 1.48e-05  3872s
+epoch 74/80  loss 0.3202  lr 1.22e-05  3922s
+epoch 75/80  loss 0.3174  lr 1.00e-05  3973s
+epoch 76/80  loss 0.3107  lr 8.21e-06  4023s
+epoch 77/80  loss 0.3132  lr 6.80e-06  4074s
+epoch 78/80  loss 0.3175  lr 5.80e-06  4124s
+epoch 79/80  loss 0.3231  lr 5.20e-06  4174s
+epoch 80/80  loss 0.3277  lr 5.00e-06  4225s  pq@0.3 0.3823  pq@0.4 0.3832  pq@0.5 0.3810
+saved fold2.pt  total time 4282s

@@ -6,3 +6,26 @@ nested CV, v2 selector:    PQ 0.4382 at threshold 0.23   (-0.0004 vs v1 extent)
 levels chosen for kept filaments: 0.4: 1311, 0.5: 1132, 0.6: 992, 0.7: 913
 feature gain: base_mean 6400, base_core80 5933, base_p90 5017, p_ring 1566, nn_dist 1476, contrast 1200, max 766, bbox_h 613, major 569, rho 564, i_ring 538, fill 509
 saved /root/kaggle/work/selectors_v2/r34_1024+rgy040_1024+r34_1536.pkl and /root/kaggle/work/selectors_v2/r34_1024+rgy040_1024+r34_1536_config.json
+[OOF] post-processing: 16 s for 707 images on 17 workers
+[OOF] wrote /root/kaggle/work/oof_sub_v2_r34_1024+rgy040_1024+r34_1536.csv: 4348 filaments over 697/707 images
+[OOF] OOF score from CSV, nested selector (honest): PQ=0.4382 SQ=0.6769 RQ=0.6474 TP=4939 FP=2121 FN=3260
+[rubric]                         v2_r34_1024+rgy040_1024+r34_1536
+[rubric] PQ                                                0.4382
+[rubric] SQ                                                0.6769
+[rubric] RQ                                                0.6474
+[rubric] TP                                             4939.0000
+[rubric] FP                                             2121.0000
+[rubric] FN                                             3260.0000
+[rubric] pairs_overlapping                              6635.0000
+[rubric] iou_mean                                          0.5852
+[rubric] iou_median                                        0.6357
+[rubric] dice_mean                                         0.7181
+[rubric] dice_median                                       0.7773
+[rubric] share_pairs_iou_gt_0.5                            0.7444
+[rubric] gt_to_pred (1:n)                                  0.0307
+[rubric] pred_to_gt (n:1)                                  0.0341
+[rubric] semantic_dice_mean                                0.6728
+[rubric] (rows '1:n' / 'n:1' show the share of filaments with 2 or more overlapping partners)
+[rubric] wrote /root/kaggle/work/eval_v2/summary.json and one figure per CSV
+post-processing: 5 s for 180 images on 17 workers
+wrote /root/kaggle/submissions/submission_v2_v1members.csv: 1070 filaments over 178/180 images

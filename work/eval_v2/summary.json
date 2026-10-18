@@ -1,0 +1,34 @@
+{
+ "v2_r34_1024+rgy040_1024+r34_1536": {
+  "PQ": 0.4382,
+  "SQ": 0.6769,
+  "RQ": 0.6474,
+  "TP": 4939,
+  "FP": 2121,
+  "FN": 3260,
+  "pairs_overlapping": 6635,
+  "iou_mean": 0.5852,
+  "iou_median": 0.6357,
+  "dice_mean": 0.7181,
+  "dice_median": 0.7773,
+  "share_pairs_iou_gt_0.5": 0.7444,
+  "gt_to_pred (1:n)": {
+   "0": 1844,
+   "1": 6103,
+   "2": 226,
+   "3+": 26,
+   "share_1": 0.7444,
+   "share_2plus": 0.0307
+  },
+  "pred_to_gt (n:1)": {
+   "0": 683,
+   "1": 6135,
+   "2": 224,
+   "3+": 17,
+   "share_1": 0.8691,
+   "share_2plus": 0.0341
+  },
+  "semantic_dice_mean": 0.6728,
+  "csv": "/root/kaggle/work/oof_sub_v2_r34_1024+rgy040_1024+r34_1536.csv"
+ }
+}
