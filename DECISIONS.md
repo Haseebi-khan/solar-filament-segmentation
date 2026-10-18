@@ -61,3 +61,26 @@ v1 and v2 files are unchanged and still reproduce 0.4381 / 0.4438.
 - **Checkpoint size.** An M1 fold checkpoint is about 0.9 GB in fp32, and M2 about 1.2 GB. Before release we
   decide between Git LFS at that size and bf16 weights, which halve it. That decision needs an OOF check that
   bf16 weights change nothing measurable.
+
+## 2026-10-18: budget run (credit \$58.46 at \$1.99/h)
+
+- **Members.** M1/M2 (ConvNeXt-L @2048, ViT-L @1536 with the 2048 px stem) would need ~40-50 GPU-hours (\$80-100).
+  The budget plan trains M3 (ResNet-34), M4 (DINOv3 ViT-B/16 + DPT) and M5 (DINOv3 ConvNeXt-S U-Net), all at 1536 px
+  with a light detail stem at 1536 px. Measured per fold (60 epochs): 0.28 h, 1.33 h, 0.98 h. v1 measured a 0.997
+  IoU retention at 1536 px (MODEL.md section 4.4), so nothing is lost by not predicting at 2048 px.
+- **Mini ablation.** abl_dice, abl_jml, abl_full (JML1, blob loss, S/D heads and deep supervision judged together)
+  instead of the six-variant set. The loss choice uses the same bootstrap gate (`src/choose_losses_v3.py`).
+- **CPU stages overlap GPU training.** An idle GPU is billed, CPU work is free next to it. This overrides the
+  earlier "GPU only" preference for the budget run (`GPU_ONLY=1` restores it).
+- **Public-leaderboard mask-width probe.** The OOF -> public gap (~0.06) equals the OOF drop from eroding the
+  training masks by 1 px, which suggests the test masks are drawn about 1 px thinner. Blueprint section 13 says never to tune
+  on the public leaderboard. We treat the two probe submissions (`*_probe_erode1.csv`, `*_probe_dilate1.csv`) as a
+  calibration of a systematic annotation convention (one bit, applied to every mask, shared by the private half
+  of the test set), not as tuning. The probe result must be a clear gain (> 0.02, public noise is a few hundredths)
+  before the corresponding variant is used. The decision and the submissions are the owner's.
+
+## 2026-10-18: mask-width probe result
+
+Public leaderboard: submission_v2.csv 0.38, the same masks eroded by 1 px 0.37, dilated by 1 px 0.35. The test
+masks are not systematically thinner or wider, so the final submission uses unmorphed masks. The `_erode1` and
+`_dilate1` copies written by run_all_v3.sh are not to be used. The OOF -> public gap (~0.06) remains unexplained.

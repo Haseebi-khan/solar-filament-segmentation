@@ -1,0 +1,22 @@
+# M4 (budget DINOv3 member): ViT-B/16 + DPT decoder at 1536 px (96x96 tokens), light detail stem at 1536 px.
+# ~5x cheaper than M2 (ViT-L) per step; no gradient checkpointing needed. Output at 1536 (as v1/v2 members).
+# Fallbacks (run_all_v3.sh picks the first that fits the per-fold budget): size 1280, then ViT-S.
+name: m4_vitb_1536_v3
+model: vit_dpt
+backbone: vit_base_patch16_dinov3.lvd1689m
+size: 1536
+vit_taps: [2, 5, 8, 11]
+hr_stem: true
+stem_native: false
+stem_ch: [16, 32]
+drop_path: 0.2
+ckpt_vit: false
+ckpt_hr: false
+epochs: 60
+bs: 8
+lr: 5.0e-4
+enc_lr: 1.0e-4
+llrd: 0.9
+wd: 0.05
+warmup: 4.0
+eval_every: 20

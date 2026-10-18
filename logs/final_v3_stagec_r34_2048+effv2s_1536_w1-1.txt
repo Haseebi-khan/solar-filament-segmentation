@@ -1,0 +1,89 @@
+12931 candidates (5530 from H1), 56 features, 706 images
+nested scorers fitted in 101s
+nested   v1: PQ=0.4423 SQ=0.6817 RQ=0.6487 TP=4874 FP=1953 FN=3325  at tau 0.23, rho 0.05
+nested pool: PQ=0.4445 SQ=0.6816 RQ=0.6522 TP=5002 FP=2139 FN=3197  at tau 0.22, rho 0.2
+oracle (true u): H1 0.4972  pool 0.5189
+v3 pool + scorer vs v1-style on the same maps: +0.0022
+feature gain: p90 4841, core90 1399, pool_n_overlap 1382, stability 1186, p_ring 1094, pool_max_iou 727, max 717, nn_dist 625, contrast 565, bbox_h 488, length 321, i_ring 311, base_mean 303, base_core80 279, rho 273
+families of the selected candidates: H1 3096, H4 551, H2 438, H3 188, H5 72, H6 24, H7@0.4 13, H7@0.6 1
+saved /root/kaggle/work/pools_v3/r34_2048+effv2s_1536_w1-1_linker/scorer
+[OOF] selection: 1 s for 707 images
+[OOF] wrote /root/kaggle/work/oof_sub_v3_r34_2048+effv2s_1536_w1-1_linker.csv: 4383 filaments over 698/707 images (tau 0.22, rho 0.2)
+[OOF] OOF score from CSV, nested scorer (honest): PQ=0.4445 SQ=0.6816 RQ=0.6522 TP=5002 FP=2139 FN=3197
+selection: 0 s for 180 images
+wrote submissions/submission_v3_r34_2048+effv2s_1536_w1-1_linker.csv: 1082 filaments over 179/180 images (tau 0.22, rho 0.2)
+[rubric]                         v3_r34_2048+effv2s_1536_w1-1_linker
+[rubric] PQ                                                   0.4445
+[rubric] SQ                                                   0.6816
+[rubric] RQ                                                   0.6522
+[rubric] TP                                                5002.0000
+[rubric] FP                                                2139.0000
+[rubric] FN                                                3197.0000
+[rubric] pairs_overlapping                                 6669.0000
+[rubric] iou_mean                                             0.5905
+[rubric] iou_median                                           0.6441
+[rubric] dice_mean                                            0.7222
+[rubric] dice_median                                          0.7835
+[rubric] share_pairs_iou_gt_0.5                               0.7500
+[rubric] gt_to_pred (1:n)                                     0.0299
+[rubric] pred_to_gt (n:1)                                     0.0321
+[rubric] semantic_dice_mean                                   0.6786
+[rubric] (rows '1:n' / 'n:1' show the share of filaments with 2 or more overlapping partners)
+[rubric] wrote /root/kaggle/work/eval_v3/summary.json and one figure per CSV
+[diag] ## v3_r34_2048+effv2s_1536_w1-1_linker
+[diag] `/root/kaggle/work/oof_sub_v3_r34_2048+effv2s_1536_w1-1_linker.csv`
+[diag] PQ **0.4445**  SQ 0.6816  RQ 0.6522  TP 5002  FP 2139  FN 3197
+[diag] ### PQ lost by cause
+[diag] | cause | count | PQ if removed | share |
+[diag] |---|---|---|---|
+[diag] | TP IoU deficit (SQ) | 5002 | +0.2076 | 55% |
+[diag] | FN missed | 1803 | +0.0592 | 16% |
+[diag] | FP merged_extent | 953 | +0.0294 | 8% |
+[diag] | FN extent | 783 | +0.0239 | 6% |
+[diag] | FP spurious | 720 | +0.0219 | 6% |
+[diag] | FP fragment | 466 | +0.0139 | 4% |
+[diag] | FN merged | 412 | +0.0123 | 3% |
+[diag] | FN fragmented | 199 | +0.0058 | 2% |
+[diag] ### By GT / prediction size (px)
+[diag] | group | PQ | GT | TP | FP | FN | recall | FN frag | FN merged | FN missed | FP spurious |
+[diag] |---|---|---|---|---|---|---|---|---|---|---|
+[diag] | 2k-8k | 0.4996 | 2245 | 1553 | 510 | 692 | 0.692 | 113 | 67 | 224 | 80 |
+[diag] | 500-2k | 0.4521 | 4390 | 2825 | 1227 | 1565 | 0.644 | 15 | 249 | 905 | 392 |
+[diag] | <500 | 0.2882 | 1263 | 446 | 373 | 817 | 0.353 | 0 | 95 | 655 | 244 |
+[diag] | >8k | 0.4916 | 301 | 178 | 29 | 123 | 0.591 | 71 | 1 | 19 | 4 |
+[diag] ### By radial zone r/R
+[diag] | group | PQ | GT | TP | FP | FN | recall | FN frag | FN merged | FN missed | FP spurious |
+[diag] |---|---|---|---|---|---|---|---|---|---|---|
+[diag] | 0.5-0.8 | 0.4493 | 4151 | 2603 | 1145 | 1548 | 0.627 | 124 | 216 | 785 | 356 |
+[diag] | >0.8 | 0.3669 | 954 | 437 | 249 | 517 | 0.458 | 6 | 30 | 397 | 129 |
+[diag] | r<0.5 | 0.4600 | 3094 | 1962 | 745 | 1132 | 0.634 | 69 | 166 | 621 | 235 |
+[diag] ### By instrument site
+[diag] | group | PQ | GT | TP | FP | FN | recall | FN frag | FN merged | FN missed | FP spurious |
+[diag] |---|---|---|---|---|---|---|---|---|---|---|
+[diag] | B | 0.4470 | 1502 | 923 | 397 | 579 | 0.615 | 31 | 76 | 320 | 146 |
+[diag] | C | 0.4372 | 1522 | 898 | 362 | 624 | 0.590 | 32 | 116 | 340 | 104 |
+[diag] | L | 0.4343 | 1438 | 867 | 427 | 571 | 0.603 | 44 | 72 | 313 | 144 |
+[diag] | M | 0.4486 | 1298 | 807 | 346 | 491 | 0.622 | 42 | 54 | 266 | 96 |
+[diag] | T | 0.4474 | 1369 | 827 | 327 | 542 | 0.604 | 23 | 56 | 331 | 121 |
+[diag] | U | 0.4563 | 1070 | 680 | 280 | 390 | 0.636 | 27 | 38 | 233 | 109 |
+[diag] ### By annotation sets per image
+[diag] | group | PQ | GT | TP | FP | FN | recall | FN frag | FN merged | FN missed | FP spurious |
+[diag] |---|---|---|---|---|---|---|---|---|---|---|
+[diag] | 1 | 0.4427 | 3206 | 1859 | 693 | 1347 | 0.580 | 69 | 162 | 861 | 211 |
+[diag] | 2 | 0.4589 | 1987 | 1280 | 530 | 707 | 0.644 | 52 | 92 | 386 | 191 |
+[diag] | 3 | 0.4369 | 3006 | 1863 | 916 | 1143 | 0.620 | 78 | 158 | 556 | 318 |
+[diag] ### Overlap degrees (1:n = predictions per GT, n:1 = GTs per prediction)
+[diag] | overlapping partners | GT filaments (1:n) | predictions (n:1) |
+[diag] |---|---|---|
+[diag] | 0 | 1803 | 720 |
+[diag] | 1 | 6153 | 6193 |
+[diag] | 2 | 216 | 208 |
+[diag] | 3+ | 27 | 19 |
+[diag] ### Decision (blueprint section 14)
+[diag] fragmented + merged share of the lost PQ: **9%** -> M4 (query-based proposals) stays optional; largest lever: A (pixel quality / SQ). 
+[diag] wrote /root/kaggle/work/diag_v3
+-- paired bootstrap vs oof_sub_v2_r34_1024+rgy040_1024+r34_1536+r34_2048+effv2s_1536.csv
+A oof_sub_v2_r34_1024+rgy040_1024+r34_1536+r34_2048+effv2s_1536.csv: PQ 0.4438
+B oof_sub_v3_r34_2048+effv2s_1536_w1-1_linker.csv: PQ 0.4445
+delta B-A +0.0008  bootstrap mean +0.0008  90% CI [-0.0011, +0.0028]  P(delta>0) 0.740  (2000 resamples of 707 images)
+gate (mean delta >= +0.003 and P(delta>0) >= 0.90): keep A

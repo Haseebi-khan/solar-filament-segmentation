@@ -31,7 +31,11 @@
 #   SKIP_ABLATIONS=1    blueprint default losses (JML1 + blob + S/D heads + deep supervision), no proxy runs
 #   SKIP_GONG=1         no download and no Stage B;   SKIP_STUDENTS=1   download, but no pseudo-labels/students
 #   MEMBERS="m3_r34_1536_v3 m1_cnxl_2048_v3 m2_vitl_1536_v3"   v3 members to train, in this order
-#   MAX_HOURS_M1=5 MAX_HOURS_M2=5 MAX_HOURS_M3=2   per-fold time budget for the benchmark's fallback choice
+#                       (budget members: m4_vitb_1536_v3, m5_cnxs_1536_v3; see scripts/run_budget_v3.sh)
+#   EXTRA_ALL="--epochs 60"   extra train_v3.py flags for every member (also used by the benchmark)
+#   BG_WORKERS=12       processes for background CPU jobs (default: all cores but 4)
+#   VARIANTS="abl_dice abl_jml abl_full" ABL_EPOCHS=40   a cheaper ablation set (see scripts/ablate_v3.sh)
+#   MAX_HOURS_M1=5 MAX_HOURS_M2=5 MAX_HOURS_M3=2 MAX_HOURS_M4=2 MAX_HOURS_M5=1.5   per-fold time budget for the benchmark's fallback choice
 #   PL_VIEWS="0 4 1 3"  TTA views for pseudo-labels ("0 4" halves the time);  MIN_U=2000  minimum GONG frames
 #   FILSEG_UNLABELED=/scratch/unlabeled   where GONG frames and pseudo-labels go (default work/unlabeled)
 #   FORCE=1             redo the CPU rounds (blend search, v2 selector, Stage C) even if they finished before
@@ -50,7 +54,7 @@ V2_NAMES="r34_2048 effv2s_1536"
 PL_VIEWS=${PL_VIEWS:-"0 4 1 3"}
 MIN_U=${MIN_U:-2000}
 NCPU=$(nproc)
-BG_WORKERS=$(( NCPU > 6 ? NCPU - 4 : 1 ))
+BG_WORKERS=${BG_WORKERS:-$(( NCPU > 6 ? NCPU - 4 : 1 ))}
 GPU_ONLY=${GPU_ONLY:-1}
 T_ALL=$(date +%s)
 
@@ -98,6 +102,8 @@ budget_of() {
   case $1 in
     m1*) echo "${MAX_HOURS_M1:-5}" ;;
     m2*) echo "${MAX_HOURS_M2:-5}" ;;
+    m4*) echo "${MAX_HOURS_M4:-2}" ;;
+    m5*) echo "${MAX_HOURS_M5:-1.5}" ;;
     *) echo "${MAX_HOURS_M3:-2}" ;;
   esac
 }
@@ -106,6 +112,8 @@ fallbacks_of() {  # first line = config as is; then the blueprint's fallbacks (m
     m1*) printf '%s\n' "" "--ckpt-stages 0 1 2" "--bs 2 --accum 4 --ckpt-stages 0 1 2" \
                        "--backbone convnext_base.dinov3_lvd1689m" "--backbone convnext_base.dinov3_lvd1689m --size 1536" ;;
     m2*) printf '%s\n' "" "--bs 4 --accum 2" "--size 1280" "--size 1280 --bs 4 --accum 2" ;;
+    m4*) printf '%s\n' "" "--backbone vit_small_patch16_dinov3.lvd1689m" ;;
+    m5*) printf '%s\n' "" "--backbone convnext_tiny.dinov3_lvd1689m" ;;
     *) printf '%s\n' "" "--bs 4 --accum 2" ;;
   esac
 }
@@ -208,6 +216,8 @@ for m in "${MEMBERS[@]}"; do
   case $m in
     m1*) DINO+=(convnext_large.dinov3_lvd1689m) ;;
     m2*) DINO+=(vit_large_patch16_dinov3.lvd1689m) ;;
+    m4*) DINO+=(vit_base_patch16_dinov3.lvd1689m) ;;
+    m5*) DINO+=(convnext_small.dinov3_lvd1689m) ;;
   esac
 done
 if [ ${#DINO[@]} -gt 0 ]; then
@@ -248,7 +258,18 @@ if [ -z "${SKIP_GONG:-}" ] && [ ! -f "$FILSEG_UNLABELED/U_images.npy" ]; then
 fi
 stop_if prep
 
-# =============================================================================================== 2. loss ablations
+# =============================================================================================== 2. benchmarks
+# Benchmarks come first: a ROCm / memory / speed problem shows up in minutes, not after the ablations.
+# They use the blueprint's default loss flags (the ablations only turn components off).
+LOSS="--region jml --w-blob 0.5 --w-sr 0 --aux-heads --deep-sup ${EXTRA_ALL:-}"
+for m in "${MEMBERS[@]}"; do
+  choose_setting "$m"
+  say "$m: $( [ "$(cat "$STATE/extra_$m.txt")" = FAILED ] && echo 'left out' || echo "flags $LOSS $(cat "$STATE/extra_$m.txt")")"
+done
+
+stop_if bench
+
+# =============================================================================================== 3. loss ablations
 LOSS_FILE=$STATE/losses.txt
 if [ ! -s "$LOSS_FILE" ]; then
   if [ -n "${SKIP_ABLATIONS:-}" ]; then
@@ -262,16 +283,10 @@ if [ ! -s "$LOSS_FILE" ]; then
     timing ablations $(( $(date +%s) - T ))
   fi
 fi
-LOSS=$(cat "$LOSS_FILE")
+LOSS="$(cat "$LOSS_FILE") ${EXTRA_ALL:-}"
 case $LOSS in --region*) ;; *) rm -f "$LOSS_FILE"; fail "no loss flags chosen (logs/run_all_v3_losses.out)" ;; esac
 say "loss flags of the v3 members: $LOSS"
 stop_if ablate
-
-# =============================================================================================== 3. benchmarks
-for m in "${MEMBERS[@]}"; do
-  choose_setting "$m"
-  say "$m: $( [ "$(cat "$STATE/extra_$m.txt")" = FAILED ] && echo 'left out' || echo "flags $LOSS $(cat "$STATE/extra_$m.txt")")"
-done
 
 # =============================================================================================== 4. teachers
 READY=()
@@ -296,13 +311,15 @@ for m in "${MEMBERS[@]}"; do
     timing "predict $m" $(( $(date +%s) - T ))
   fi
   if preds_done "$m"; then READY+=("$m"); fi
-  if [ ${#READY[@]} -eq 1 ] && [ "$m" = "${READY[0]}" ] && [ ${#MEMBERS[@]} -gt 1 ]; then
-    cpu_round "early" "$V2_NAMES ${READY[*]}" ""   # an early v3 submission while the GPU trains the next member
+  if [ "$m" != "${MEMBERS[${#MEMBERS[@]}-1]}" ] && preds_done "$m"; then
+    # a v3 submission from the members finished so far, while the GPU trains the next member (also the fallback
+    # if the budget stops the run early)
+    cpu_round "after_${m%%_*}" "$V2_NAMES ${READY[*]}" ""
   fi
 done
 [ ${#READY[@]} -gt 0 ] || fail "no v3 member finished"
 HEAVY=""
-for m in "${READY[@]}"; do case $m in m1*|m2*) HEAVY="$HEAVY $m" ;; esac; done
+for m in "${READY[@]}"; do case $m in m1*|m2*|m4*|m5*) HEAVY="$HEAVY $m" ;; esac; done
 cpu_round "teachers" "$V2_NAMES ${READY[*]}" "$HEAVY"
 stop_if teachers
 
@@ -365,7 +382,7 @@ if [ "$GPU_ONLY" = 1 ]; then
   echo "  (skips all finished GPU work; runs diagnostics, blend search, v2 selector, Stage C and the summary table)"
   exit 0
 fi
-"$PY" - "$STATE/candidates.tsv" "$WORK/selectors_v2/r34_1024+rgy040_1024+r34_1536+r34_2048+effv2s_1536_config.json" <<'EOF'
+"$PY" - "$STATE/candidates.tsv" "$WORK/selectors_v2/r34_1024+rgy040_1024+r34_1536+r34_2048+effv2s_1536_config.json" "$STATE/recommended.txt" <<'EOF'
 import json
 import os
 import sys
@@ -383,7 +400,18 @@ for label, (pq, path) in sorted(rows.items(), key=lambda kv: -kv[1][0]):
 if rows:
     label, (pq, path) = max(rows.items(), key=lambda kv: kv[1][0])
     print(f"\nrecommended upload: {path}  (nested OOF PQ {pq:.4f}; nothing was submitted)")
+    open(sys.argv[3], "w").write(path)
 EOF
+REC=$(cat "$STATE/recommended.txt" 2>/dev/null || true)
+if [ -n "$REC" ] && [ -f "$REC" ]; then
+  # 1 px thinner / wider copies of the recommended file, for the leaderboard probes (the OOF -> public gap
+  # of ~0.06 matches eroding the training masks by 1 px). Out of fold, radius 0 is best.
+  for r in -1 1; do
+    n=$([ "$r" -lt 0 ] && echo erode1 || echo dilate1)
+    "$PY" tools/morph_submission_v2.py "$REC" --radius "$r" --out "${REC%.csv}_$n.csv" 2>&1 | grep -v -i warn || true
+  done
+  echo "  mask-width variants written: ${REC%.csv}_erode1.csv and _dilate1.csv (upload them only according to your probe results)"
+fi
 cat <<EOF
 
 $(date '+%F %T') | run_all_v3 finished. For the report: logs/final_v3_diag.txt (taxonomy, ceilings),

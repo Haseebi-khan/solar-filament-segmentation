@@ -29,7 +29,10 @@ class ModelConfig:
     model: str = "smp_unet"                  # smp_unet | cnx_unet | vit_dpt
     backbone: str = "resnet34"
     size: int = 1536                         # encoder input resolution (full disk, area-resized)
-    hr_stem: bool = False                    # full-resolution detail branch; output at 2048
+    hr_stem: bool = False                    # detail branch at stride 1 and 2 (skip connections for thin filaments)
+    stem_native: bool = True                 # True: stem on the native 2048 image, output 2048; False: stem at
+                                             # ``size``, output ``size`` (3x cheaper, for the budget members)
+    stem_ch: list = field(default_factory=lambda: [32, 64])   # channels of the stride-1 / stride-2 stem features
     edge_inputs: bool = False                # Sobel magnitude + LoG channels into the HR stem
     aux_heads: bool = True                   # S and D heads
     deep_sup: bool = True                    # deep-supervision logits (training only)
@@ -42,7 +45,7 @@ class ModelConfig:
 
     @property
     def out_size(self) -> int:
-        return NATIVE if self.hr_stem else self.size
+        return NATIVE if (self.hr_stem and self.stem_native) else self.size
 
 
 def _gn(c: int) -> nn.GroupNorm:
@@ -233,34 +236,36 @@ class FilaNet(nn.Module):
         self.size = cfg.size
         self.out_size = cfg.out_size
         self.hr = cfg.hr_stem
+        self.full_input = cfg.hr_stem and cfg.stem_native   # the stem (and the output) are at 2048 px
         n_out = 3 if cfg.aux_heads else 1
+        c1, c2 = cfg.stem_ch
         if self.hr:
-            self.stem = HRStem(32, 64, edges=cfg.edge_inputs)
+            self.stem = HRStem(c1, c2, edges=cfg.edge_inputs)
         if cfg.model == "cnx_unet":
             self.encoder = TimmConvEncoder(cfg.backbone, cfg.pretrained, cfg.drop_path, cfg.ckpt_stages)
             c = self.encoder.channels
             self.ups = nn.ModuleList([Up(c[3], c[2], 512), Up(512, c[1], 256), Up(256, c[0], 128)])
             tap_ch = (128, 256)
-            self.up2 = Up(128, 64 if self.hr else 0, 64)
-            self.up1 = Up(64, 32 if self.hr else 0, 32)
-            head_c = 32
+            self.up2 = Up(128, c2 if self.hr else 0, c2 if self.hr else 64)
+            self.up1 = Up(c2 if self.hr else 64, c1 if self.hr else 0, c1 if self.hr else 32)
+            head_c = c1 if self.hr else 32
         elif cfg.model == "smp_unet":
             self.encoder = SmpEncoder(cfg.backbone, cfg.pretrained)
             c = self.encoder.channels  # strides 2, 4, 8, 16, 32
             self.ups = nn.ModuleList([Up(c[4], c[3], 256), Up(256, c[2], 128), Up(128, c[1], 64)])
             tap_ch = (64, 128)
-            self.up_enc2 = Up(64, c[0], 64 if self.hr else 32)
-            self.up2 = Up(64, 64, 64) if self.hr else None
-            self.up1 = Up(64, 32, 32) if self.hr else Up(32, 0, 16)
-            head_c = 32 if self.hr else 16
+            self.up_enc2 = Up(64, c[0], c2 if self.hr else 32)
+            self.up2 = Up(c2, c2, c2) if self.hr else None
+            self.up1 = Up(c2, c1, c1) if self.hr else Up(32, 0, 16)
+            head_c = c1 if self.hr else 16
         elif cfg.model == "vit_dpt":
             self.encoder = ViTEncoder(cfg.backbone, cfg.size, cfg.vit_taps, cfg.pretrained, cfg.drop_path,
                                       cfg.ckpt_vit)
             self.neck = DPTNeck(self.encoder.dim, 256)
             tap_ch = (256, 256)
-            self.up2 = Up(256, 64 if self.hr else 0, 64)
-            self.up1 = Up(64, 32 if self.hr else 0, 32)
-            head_c = 32
+            self.up2 = Up(256, c2 if self.hr else 0, c2 if self.hr else 64)
+            self.up1 = Up(c2 if self.hr else 64, c1 if self.hr else 0, c1 if self.hr else 32)
+            head_c = c1 if self.hr else 32
         else:
             raise ValueError(cfg.model)
         self.heads = Heads(head_c, n_out)
@@ -275,7 +280,7 @@ class FilaNet(nn.Module):
         h_in = x_in.shape[-1]
         s1 = s2 = None
         if self.hr:
-            s1, s2 = self._run(self.stem, x_full if x_full is not None else x_in)
+            s1, s2 = self._run(self.stem, x_full if (self.full_input and x_full is not None) else x_in)
         if self.cfg.model == "vit_dpt":
             x4, x8 = self.neck(self.encoder(x_in))
             x = x4

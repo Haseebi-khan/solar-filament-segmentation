@@ -60,6 +60,8 @@ class TrainConfig:
     backbone: str = "resnet34"
     size: int = 1536
     hr_stem: bool = False
+    stem_native: bool = True
+    stem_ch: list = field(default_factory=lambda: [32, 64])
     edge_inputs: bool = False
     aux_heads: bool = True
     deep_sup: bool = True
@@ -248,7 +250,7 @@ def main(argv=None):
     val_stems = [stems[i] for i in va_idx]
 
     # ---- labelled data on the GPU (uint8 / int16)
-    need_full = mcfg.hr_stem or mcfg.size == 2048
+    need_full = (mcfg.hr_stem and mcfg.stem_native) or mcfg.size == 2048
     out_size = mcfg.out_size
     full = np.load(os.path.join(CACHE_DIR, "train_images.npy"), mmap_mode="r")
     t0 = time.time()

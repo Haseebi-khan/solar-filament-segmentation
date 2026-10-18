@@ -7,6 +7,7 @@
 #   nohup scripts/ablate_v3.sh > logs/ablate_v3.out 2>&1 &
 #   VARIANTS="abl_full_1536 abl_full_hr" scripts/ablate_v3.sh        # HR stem test (needs 1536 targets)
 #
+# Cheaper set (~1.5 h with PARALLEL=4): VARIANTS="abl_dice abl_jml abl_full" ABL_EPOCHS=40 (src/choose_losses_v3.py copes).
 # Results are appended to logs/final_v3_ablations.txt. Rerunning skips finished folds, maps and CSVs.
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
@@ -39,7 +40,7 @@ train_variant() {
   for f in 0 1 2 3 4; do
     if [ -f "$WORK/models/$v/fold$f.pt" ]; then continue; fi
     # shellcheck disable=SC2086
-    "$PY" src/train_v3.py --config configs/proxy_r34_1024_v3.yaml --name "$v" --fold "$f" --resume ${ARGS[$v]} \
+    "$PY" src/train_v3.py --config configs/proxy_r34_1024_v3.yaml --name "$v" --fold "$f" --resume ${ARGS[$v]} ${ABL_EPOCHS:+--epochs $ABL_EPOCHS} \
       > "logs/${v}_f${f}.out" 2>&1 || echo "$(date '+%F %T') FAILED $v fold $f (logs/${v}_f${f}.out)" &
     sleep 20
     while [ "$(jobs -rp | wc -l)" -ge "$PARALLEL" ]; do sleep 20; done

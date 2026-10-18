@@ -1,0 +1,27 @@
+abl_dice  t=0.4: PQ=0.3772 SQ=0.6614 RQ=0.5703 TP=5171 FP=4764 FN=3028
+abl_dice  t=0.5: PQ=0.3838 SQ=0.6644 RQ=0.5776 TP=5147 FP=4475 FN=3052
+abl_dice  t=0.6: PQ=0.3861 SQ=0.6672 RQ=0.5787 TP=5087 FP=4296 FN=3112
+abl_dice  t=0.7: PQ=0.3854 SQ=0.6674 RQ=0.5775 TP=5049 FP=4239 FN=3150
+best t=0.6: PQ=0.3861 SQ=0.6672 RQ=0.5787 TP=5087 FP=4296 FN=3112  -> /root/kaggle/work/ablations_v3/abl_dice.csv
+abl_jml  t=0.4: PQ=0.3849 SQ=0.6659 RQ=0.5780 TP=5175 FP=4532 FN=3024
+abl_jml  t=0.5: PQ=0.3864 SQ=0.6710 RQ=0.5759 TP=5057 FP=4306 FN=3142
+abl_jml  t=0.6: PQ=0.3767 SQ=0.6686 RQ=0.5634 TP=4835 FP=4130 FN=3364
+abl_jml  t=0.7: PQ=0.3460 SQ=0.6620 RQ=0.5227 TP=4387 FP=4200 FN=3812
+best t=0.5: PQ=0.3864 SQ=0.6710 RQ=0.5759 TP=5057 FP=4306 FN=3142  -> /root/kaggle/work/ablations_v3/abl_jml.csv
+-- abl_jml vs abl_dice
+A abl_dice.csv: PQ 0.3861
+B abl_jml.csv: PQ 0.3864
+delta B-A +0.0003  bootstrap mean +0.0003  90% CI [-0.0030, +0.0036]  P(delta>0) 0.572  (2000 resamples of 707 images)
+gate (mean delta >= +0.003 and P(delta>0) >= 0.90): keep A
+abl_full  t=0.4: PQ=0.3956 SQ=0.6692 RQ=0.5911 TP=5121 FP=4006 FN=3078
+abl_full  t=0.5: PQ=0.3899 SQ=0.6699 RQ=0.5820 TP=4986 FP=3948 FN=3213
+abl_full  t=0.6: PQ=0.3744 SQ=0.6664 RQ=0.5618 TP=4754 FP=3971 FN=3445
+abl_full  t=0.7: PQ=0.3456 SQ=0.6593 RQ=0.5242 TP=4384 FP=4143 FN=3815
+best t=0.4: PQ=0.3956 SQ=0.6692 RQ=0.5911 TP=5121 FP=4006 FN=3078  -> /root/kaggle/work/ablations_v3/abl_full.csv
+== loss choice from the proxy ablations
+abl_dml vs abl_jml: missing, keeping the default
+abl_dice vs abl_jml: PQ 0.3861 vs 0.3864, delta -0.0003 [-0.0036, +0.0030], P(>0) 0.43 -> no
+abl_jml vs abl_full: PQ 0.3864 vs 0.3956, delta -0.0092 [-0.0122, -0.0060], P(>0) 0.00 -> no
+abl_full_sr vs abl_full: missing, keeping the default
+chosen: region jml, blob on, S/D heads + deep supervision on, skeleton recall off
+FLAGS --region jml --w-blob 0.5 --w-sr 0 --aux-heads --deep-sup

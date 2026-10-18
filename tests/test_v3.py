@@ -180,13 +180,22 @@ def test_models_forward_cpu():
             ModelConfig(model="cnx_unet", backbone="convnext_tiny", size=128, hr_stem=True, pretrained=False,
                         ckpt_stages=[1], ckpt_hr=True),
             ModelConfig(model="vit_dpt", backbone="vit_small_patch16_dinov3", size=128, hr_stem=True,
-                        vit_taps=[2, 5, 8, 11], pretrained=False)]
+                        vit_taps=[2, 5, 8, 11], pretrained=False),
+            # budget variants: light stem at the encoder resolution, output = encoder resolution
+            ModelConfig(model="vit_dpt", backbone="vit_small_patch16_dinov3", size=128, hr_stem=True,
+                        stem_native=False, stem_ch=[16, 32], vit_taps=[2, 5, 8, 11], pretrained=False),
+            ModelConfig(model="smp_unet", backbone="resnet34", size=128, hr_stem=True, stem_native=False,
+                        stem_ch=[16, 32], pretrained=False),
+            ModelConfig(model="cnx_unet", backbone="convnext_tiny", size=128, hr_stem=True, stem_native=False,
+                        stem_ch=[16, 32], pretrained=False)]
     for c in cfgs:
         m = build_model_v3(c).train()
         x_in = torch.randn(1, 1, 128, 128)
-        x_full = torch.randn(1, 1, 256, 256) if c.hr_stem else None
+        x_full = torch.randn(1, 1, 256, 256) if (c.hr_stem and c.stem_native) else None
         out = m(x_in, x_full)
-        exp = 256 if c.hr_stem else 128
+        exp = 256 if (c.hr_stem and c.stem_native) else 128
+        assert c.out_size == (2048 if (c.hr_stem and c.stem_native) else c.size)
+        assert m.full_input == (c.hr_stem and c.stem_native)
         assert out["p"].shape == (1, 1, exp, exp), (c.model, out["p"].shape)
         assert out["s"].shape == out["d"].shape == out["p"].shape
         assert len(out["ds"]) == 2
@@ -203,7 +212,9 @@ def test_train_cli_parses_every_config_and_override():
     for path in sorted(glob.glob(os.path.join(root, "configs", "*.yaml")) + glob.glob(os.path.join(root, "configs", "students", "*.yaml"))):
         c = train_v3.parse_config(["--config", path, "--fold", "1", "--resume", "--region", "dml", "--w-blob", "0",
                                    "--w-sr", "0.5", "--no-aux-heads", "--no-deep-sup", "--ckpt-stages", "0", "1",
-                                   "--bs", "4", "--accum", "2", "--size", "1280", "--bench-steps", "50"])
+                                   "--bs", "4", "--accum", "2", "--size", "1280", "--bench-steps", "50",
+                                   "--stem-ch", "8", "16", "--no-stem-native"])
+        assert c.stem_ch == [8, 16] and c.stem_native is False
         assert c.region == "dml" and not c.aux_heads and c.ckpt_stages == [0, 1] and c.size == 1280 and c.resume
         assert c.model_config().out_size in (1280, 2048) and c.loss_weights().w_sr == 0.5
     c = train_v3.parse_config(["--config", os.path.join(root, "configs", "m3_r34_1536_v3.yaml")])

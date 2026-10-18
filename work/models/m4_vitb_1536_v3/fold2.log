@@ -1,0 +1,34 @@
+{"name": "m4_vitb_1536_v3", "fold": 2, "seed": 0, "model": "vit_dpt", "backbone": "vit_base_patch16_dinov3.lvd1689m", "size": 1536, "hr_stem": true, "stem_native": false, "stem_ch": [16, 32], "edge_inputs": false, "aux_heads": true, "deep_sup": true, "drop_path": 0.2, "pretrained": true, "vit_taps": [2, 5, 8, 11], "ckpt_stages": [], "ckpt_vit": false, "ckpt_hr": false, "epochs": 60, "bs": 8, "accum": 1, "lr": 0.0005, "enc_lr": 0.0001, "llrd": 0.9, "wd": 0.05, "warmup": 4.0, "ema": 0.998, "clip": 2.0, "region": "jml", "w_region": 1.0, "w_blob": 0.5, "w_s": 0.5, "w_d": 0.25, "w_ds": 1.0, "w_sr": 0.0, "uniform_sampling": false, "no_rotate": false, "unlabeled": "", "pseudo": "", "lambda_u": 1.0, "u_frac": 0.5, "u_exclude_hours": 72.0, "student_aug": false, "init": "", "eval_every": 20, "bench_steps": 0, "save_every": 5, "resume": true}
+train images 566  val images 141  input 1536  output 1536  targets ['soft', 'skel', 'core']  blob on  data on GPU in 3s
+model vit_dpt/vit_base_patch16_dinov3.lvd1689m: 97.8 M parameters, 28 parameter groups
+micro-batches/epoch 71 (8 labelled + 0 unlabelled)  accum 1  optimiser steps 4260
+epoch 1/60  bce 0.0309  region 0.9951  blob 0.4997  skel 0.5092  core 0.0231  ds 0.4697  total 2.5278  lr 7.06e-06  79s
+epoch 2/60  bce 0.0212  region 0.8752  blob 0.4867  skel 0.4815  core 0.0205  ds 0.3232  total 2.2083  lr 1.41e-05  148s
+epoch 3/60  bce 0.0154  region 0.6696  blob 0.4355  skel 0.3764  core 0.0166  ds 0.2546  total 1.7680  lr 2.12e-05  217s
+epoch 4/60  bce 0.0153  region 0.5995  blob 0.4138  skel 0.3116  core 0.0146  ds 0.2341  total 1.5889  lr 2.82e-05  286s
+epoch 5/60  bce 0.0147  region 0.5492  blob 0.4057  skel 0.2763  core 0.0132  ds 0.2171  total 1.4762  lr 2.82e-05  355s
+epoch 6/60  bce 0.0137  region 0.5259  blob 0.4005  skel 0.2609  core 0.0127  ds 0.2059  total 1.4196  lr 2.82e-05  425s
+epoch 7/60  bce 0.0135  region 0.5139  blob 0.3958  skel 0.2549  core 0.0128  ds 0.2014  total 1.3924  lr 2.80e-05  493s
+epoch 8/60  bce 0.0135  region 0.5131  blob 0.3964  skel 0.2511  core 0.0125  ds 0.1985  total 1.3851  lr 2.79e-05  562s
+epoch 9/60  bce 0.0128  region 0.5042  blob 0.3943  skel 0.2446  core 0.0123  ds 0.1937  total 1.3619  lr 2.77e-05  631s
+epoch 10/60  bce 0.0124  region 0.4974  blob 0.3908  skel 0.2392  core 0.0119  ds 0.1899  total 1.3416  lr 2.75e-05  700s
+epoch 11/60  bce 0.0117  region 0.4982  blob 0.3902  skel 0.2359  core 0.0119  ds 0.1901  total 1.3381  lr 2.72e-05  770s
+epoch 12/60  bce 0.0117  region 0.4913  blob 0.3861  skel 0.2323  core 0.0120  ds 0.1875  total 1.3208  lr 2.69e-05  839s
+epoch 13/60  bce 0.0116  region 0.4796  blob 0.3924  skel 0.2270  core 0.0118  ds 0.1839  total 1.3062  lr 2.65e-05  907s
+epoch 14/60  bce 0.0114  region 0.4805  blob 0.3858  skel 0.2279  core 0.0117  ds 0.1831  total 1.3003  lr 2.61e-05  976s
+epoch 15/60  bce 0.0114  region 0.4783  blob 0.3889  skel 0.2247  core 0.0113  ds 0.1823  total 1.2969  lr 2.57e-05  1045s
+epoch 16/60  bce 0.0112  region 0.4654  blob 0.3874  skel 0.2194  core 0.0113  ds 0.1774  total 1.2720  lr 2.52e-05  1115s
+epoch 17/60  bce 0.0117  region 0.4759  blob 0.3880  skel 0.2232  core 0.0112  ds 0.1812  total 1.2912  lr 2.47e-05  1184s
+epoch 18/60  bce 0.0115  region 0.4735  blob 0.3905  skel 0.2200  core 0.0111  ds 0.1797  total 1.2864  lr 2.42e-05  1252s
+epoch 19/60  bce 0.0113  region 0.4668  blob 0.3893  skel 0.2198  core 0.0111  ds 0.1774  total 1.2758  lr 2.36e-05  1321s
+epoch 20/60  bce 0.0113  region 0.4694  blob 0.3852  skel 0.2198  core 0.0112  ds 0.1780  total 1.2747  lr 2.30e-05  1390s  pq@0.5 0.3493  pq@0.6l8 0.3670
+epoch 21/60  bce 0.0113  region 0.4677  blob 0.3854  skel 0.2204  core 0.0113  ds 0.1774  total 1.2736  lr 2.24e-05  1527s
+epoch 22/60  bce 0.0108  region 0.4700  blob 0.3861  skel 0.2198  core 0.0114  ds 0.1774  total 1.2754  lr 2.17e-05  1596s
+epoch 23/60  bce 0.0107  region 0.4634  blob 0.3840  skel 0.2194  core 0.0112  ds 0.1746  total 1.2632  lr 2.10e-05  1665s
+epoch 24/60  bce 0.0107  region 0.4562  blob 0.3867  skel 0.2158  core 0.0108  ds 0.1721  total 1.2523  lr 2.03e-05  1733s
+epoch 25/60  bce 0.0105  region 0.4621  blob 0.3870  skel 0.2167  core 0.0109  ds 0.1740  total 1.2612  lr 1.96e-05  1802s
+epoch 26/60  bce 0.0102  region 0.4602  blob 0.3845  skel 0.2158  core 0.0109  ds 0.1731  total 1.2547  lr 1.89e-05  1872s
+epoch 27/60  bce 0.0105  region 0.4549  blob 0.3844  skel 0.2118  core 0.0108  ds 0.1709  total 1.2433  lr 1.81e-05  1941s
+epoch 28/60  bce 0.0107  region 0.4570  blob 0.3803  skel 0.2132  core 0.0108  ds 0.1715  total 1.2436  lr 1.74e-05  2010s
+epoch 29/60  bce 0.0099  region 0.4526  blob 0.3830  skel 0.2094  core 0.0105  ds 0.1696  total 1.2350  lr 1.66e-05  2079s
+epoch 30/60  bce 0.0106  region 0.4521  blob 0.3817  skel 0.2127  core 0.0109  ds 0.1703  total 1.2382  lr 1.58e-05  2147s

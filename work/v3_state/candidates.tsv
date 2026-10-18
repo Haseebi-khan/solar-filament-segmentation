@@ -1,0 +1,3 @@
+v3 pool+scorer r34_2048+effv2s_1536_w1-1_linker	0.4445	submissions/submission_v3_r34_2048+effv2s_1536_w1-1_linker.csv
+v2 selector on r34_2048+effv2s_1536+m3_r34_1536_v3_w1-1-1	0.4449	submissions/submission_v3_rescorer_after_m3.csv
+v3 pool+scorer r34_2048+effv2s_1536+m3_r34_1536_v3_w1-1-1_linker	0.4443	submissions/submission_v3_r34_2048+effv2s_1536+m3_r34_1536_v3_w1-1-1_linker.csv

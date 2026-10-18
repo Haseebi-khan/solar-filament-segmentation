@@ -62,9 +62,15 @@ def main():
         region, region_run = "dml", "abl_dml"
     if gate(region_run, "abl_dice", args.dir, meta, log):
         region = "dice"
-    blob = bool(gate("abl_jml", "abl_jml_blob", args.dir, meta, log))
-    worse = gate("abl_full", "abl_jml_blob", args.dir, meta, log)   # reversed: is "without heads" better?
-    heads = not worse
+    if os.path.exists(os.path.join(args.dir, "abl_jml_blob.csv")):
+        blob = bool(gate("abl_jml", "abl_jml_blob", args.dir, meta, log))
+        worse = gate("abl_full", "abl_jml_blob", args.dir, meta, log)   # reversed: is "without heads" better?
+        heads = not worse
+    else:
+        # reduced set (abl_dice, abl_jml, abl_full): blob loss and S/D heads + deep supervision are judged together.
+        # They stay on (as in the blueprint, and S/D feed Stage C) unless the plain JML1 run is significantly better.
+        plain_better = gate("abl_full", "abl_jml", args.dir, meta, log)
+        blob = heads = not plain_better
     sr = bool(gate("abl_full", "abl_full_sr", args.dir, meta, log))
     flags = (f"--region {region} --w-blob {0.5 if blob else 0} --w-sr {0.5 if sr else 0} "
              + ("--aux-heads --deep-sup" if heads else "--no-aux-heads --no-deep-sup"))

@@ -30,7 +30,7 @@ def predict_maps(models: list, images, tta: int = 8, batch_size: int = 2, out_si
         for model in models:
             for k in views:
                 xi = _dihedral(x_in, k)
-                xf = _dihedral(x_full, k) if model.hr else None
+                xf = _dihedral(x_full, k) if model.full_input else None
                 if channels_last:
                     xi = xi.contiguous(memory_format=torch.channels_last)
                     xf = xf.contiguous(memory_format=torch.channels_last) if xf is not None else None

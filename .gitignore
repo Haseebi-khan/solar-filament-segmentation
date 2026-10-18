@@ -41,3 +41,6 @@ work/linker_v3/
 work/ablations_v3/
 work/models/abl_*/
 work/unlabeled/
+# v3 budget members: checkpoints are 240-390 MB (GitHub limit 100 MB, no Git LFS here); released separately
+work/models/m4_vitb_1536_v3/*.pt
+work/models/m5_cnxs_1536_v3/*.pt

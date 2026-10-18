@@ -1,0 +1,17 @@
+# M5 (budget DINOv3 CNN member): U-Net on DINOv3 ConvNeXt-S at 1536 px with the light detail stem (output 1536).
+# Diversity for the ensemble next to M3 (ResNet-34) and M4 (ViT-B). Fallback: convnext_tiny.dinov3_lvd1689m.
+name: m5_cnxs_1536_v3
+model: cnx_unet
+backbone: convnext_small.dinov3_lvd1689m
+size: 1536
+hr_stem: true
+stem_native: false
+stem_ch: [16, 32]
+drop_path: 0.2
+epochs: 60
+bs: 8
+lr: 5.0e-4
+enc_lr: 1.0e-4
+wd: 0.05
+warmup: 3.0
+eval_every: 20

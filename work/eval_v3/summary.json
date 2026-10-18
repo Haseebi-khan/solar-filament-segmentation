@@ -1,0 +1,34 @@
+{
+ "v3_r34_2048+effv2s_1536+m3_r34_1536_v3_w1-1-1_linker": {
+  "PQ": 0.4443,
+  "SQ": 0.6827,
+  "RQ": 0.6507,
+  "TP": 4970,
+  "FP": 2106,
+  "FN": 3229,
+  "pairs_overlapping": 6632,
+  "iou_mean": 0.5912,
+  "iou_median": 0.6445,
+  "dice_mean": 0.7226,
+  "dice_median": 0.7838,
+  "share_pairs_iou_gt_0.5": 0.7494,
+  "gt_to_pred (1:n)": {
+   "0": 1860,
+   "1": 6076,
+   "2": 235,
+   "3+": 28,
+   "share_1": 0.7411,
+   "share_2plus": 0.0321
+  },
+  "pred_to_gt (n:1)": {
+   "0": 663,
+   "1": 6207,
+   "2": 191,
+   "3+": 14,
+   "share_1": 0.8773,
+   "share_2plus": 0.029
+  },
+  "semantic_dice_mean": 0.6764,
+  "csv": "/root/kaggle/work/oof_sub_v3_r34_2048+effv2s_1536+m3_r34_1536_v3_w1-1-1_linker.csv"
+ }
+}
