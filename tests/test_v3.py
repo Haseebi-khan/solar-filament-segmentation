@@ -195,6 +195,21 @@ def test_models_forward_cpu():
         assert sum(len(g["params"]) for g in groups) == sum(1 for p in m.parameters() if p.requires_grad)
 
 
+# ----------------------------------------------------------------------------------------------- train CLI
+def test_train_cli_parses_every_config_and_override():
+    import glob
+    import train_v3
+    root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+    for path in sorted(glob.glob(os.path.join(root, "configs", "*.yaml")) + glob.glob(os.path.join(root, "configs", "students", "*.yaml"))):
+        c = train_v3.parse_config(["--config", path, "--fold", "1", "--resume", "--region", "dml", "--w-blob", "0",
+                                   "--w-sr", "0.5", "--no-aux-heads", "--no-deep-sup", "--ckpt-stages", "0", "1",
+                                   "--bs", "4", "--accum", "2", "--size", "1280", "--bench-steps", "50"])
+        assert c.region == "dml" and not c.aux_heads and c.ckpt_stages == [0, 1] and c.size == 1280 and c.resume
+        assert c.model_config().out_size in (1280, 2048) and c.loss_weights().w_sr == 0.5
+    c = train_v3.parse_config(["--config", os.path.join(root, "configs", "m3_r34_1536_v3.yaml")])
+    assert c.aux_heads and c.deep_sup and c.vit_taps == [5, 11, 17, 23] and c.name == "m3_r34_1536_v3"
+
+
 # ----------------------------------------------------------------------------------------------- leakage
 def test_leakage_folds_and_unlabeled():
     import pickle

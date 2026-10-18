@@ -32,7 +32,7 @@ import queue
 import sys
 import threading
 import time
-from dataclasses import asdict, dataclass, field, fields
+from dataclasses import MISSING, asdict, dataclass, field, fields
 from datetime import datetime
 
 import numpy as np
@@ -126,7 +126,8 @@ def parse_config(argv=None) -> TrainConfig:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", default=None, help="YAML file with TrainConfig fields (CLI overrides it)")
     for f in fields(TrainConfig):
-        default = defaults.get(f.name, f.default if f.default_factory is None else f.default_factory())
+        fallback = f.default_factory() if f.default_factory is not MISSING else f.default
+        default = defaults.get(f.name, fallback)
         flag = "--" + f.name.replace("_", "-")
         if isinstance(default, bool):
             ap.add_argument(flag, action=argparse.BooleanOptionalAction, default=default)
