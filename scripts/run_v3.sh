@@ -43,6 +43,21 @@ tag_of() {  # members with weight > 0, joined by +
   done
   echo "$out"
 }
+wsig_of() {  # non-zero weights joined by -, e.g. 1-2-2
+  local -a w
+  read -r -a w <<< "$1"
+  local out="" x
+  for x in "${w[@]}"; do
+    if awk "BEGIN{exit !($x > 0)}"; then out="${out:+$out-}$x"; fi
+  done
+  echo "$out"
+}
+record() {  # record <label> <json config> <json key> <submission csv>: nested PQ of a finished candidate
+  mkdir -p "$WORK/v3_state"
+  local pq
+  pq=$("$PY" -c "import json, sys; print(round(json.load(open(sys.argv[1]))[sys.argv[2]], 4))" "$2" "$3")
+  printf '%s\t%s\t%s\n' "$1" "$pq" "$4" >> "$WORK/v3_state/candidates.tsv"
+}
 T0=$(date +%s)
 
 case "$stage" in
@@ -68,17 +83,21 @@ stagec)
   BASE_CSV=${BASE_CSV:-$V2_CSV}
   read -r -a N <<< "$NAMES"
   read -r -a W <<< "$WEIGHTS"
-  TAG=$(tag_of "$NAMES" "$WEIGHTS")
+  [ ${#N[@]} -eq ${#W[@]} ] || { say "NAMES and WEIGHTS differ in length"; exit 1; }
+  # one directory per member set AND weight vector, so a rerun with other weights never reuses a stale pool
+  TAG=$(tag_of "$NAMES" "$WEIGHTS")_w$(wsig_of "$WEIGHTS")
   LOG=logs/final_v3_stagec_${TAG}.txt
   LK=()
   POOL=$WORK/pools_v3/$TAG
   if [ "${LINKER:-1}" = "1" ]; then
     if [ ! -f "$WORK/linker_v3/$TAG/linker.pkl" ]; then
       say "training the fragment linker on $TAG (log $LOG)"
-      "$PY" src/train_linker_v3.py --names "${N[@]}" --weights "${W[@]}" --workers "$WORKERS" 2>&1 | quiet | tee -a "$LOG"
+      "$PY" src/train_linker_v3.py --names "${N[@]}" --weights "${W[@]}" --workers "$WORKERS" \
+        --out "$WORK/linker_v3/$TAG" 2>&1 | quiet | tee -a "$LOG"
     fi
     LK=(--linker "$WORK/linker_v3/$TAG/linker.pkl" --link-taus ${LINK_TAUS:-0.4 0.6})
-    POOL=${POOL}_linker
+    TAG=${TAG}_linker
+    POOL=$WORK/pools_v3/$TAG
   fi
   for split in oof test; do
     if [ ! -f "$POOL/$split/features.parquet" ] || [ -n "${FORCE:-}" ]; then
@@ -90,8 +109,8 @@ stagec)
   say "stacked scorer + overlap-aware selection (nested CV)"
   "$PY" src/train_scorer_v3.py --pool "$POOL" --workers "$WORKERS" 2>&1 | quiet | tee -a "$LOG"
   CONF=$POOL/scorer/scorer_config.json
-  OOF=$WORK/oof_sub_v3_${TAG}$( [ ${#LK[@]} -gt 0 ] && echo _linker ).csv
-  SUB=submissions/submission_v3_${TAG}$( [ ${#LK[@]} -gt 0 ] && echo _linker ).csv
+  OOF=$WORK/oof_sub_v3_${TAG}.csv
+  SUB=submissions/submission_v3_${TAG}.csv
   "$PY" src/make_submission_v3.py --config "$CONF" --oof --out "$OOF" --workers "$WORKERS" 2>&1 | quiet | sed 's/^/[OOF] /' | tee -a "$LOG"
   "$PY" src/make_submission_v3.py --config "$CONF" --out "$SUB" --workers "$WORKERS" 2>&1 | quiet | tee -a "$LOG"
   "$PY" src/evaluate_v2.py "$OOF" --labels "v3_${TAG}" --out "$WORK/eval_v3" 2>&1 | quiet | sed 's/^/[rubric] /' | tee -a "$LOG"
@@ -100,6 +119,7 @@ stagec)
     echo "-- paired bootstrap vs $(basename "$BASE_CSV")" | tee -a "$LOG"
     "$PY" src/compare_v3.py "$BASE_CSV" "$OOF" 2>&1 | quiet | tee -a "$LOG"
   fi
+  record "v3 pool+scorer $TAG" "$CONF" nested_pq "$SUB"
   say "done: $SUB (honest OOF CSV $OOF; log $LOG)"
   timing "stagec $TAG" $(( $(date +%s) - T0 ))
   ;;
@@ -147,7 +167,10 @@ rescorer)
     NAMES="$NAMES" scripts/final_ensemble_v2.sh
     say "pick the best weights from logs/final_v2_$(echo "$NAMES" | tr ' ' '+').txt and rerun with WEIGHTS=\"...\""
   else
-    NAMES="$NAMES" WEIGHTS="$WEIGHTS" OUT=submissions/submission_v3_rescorer.csv WORKERS=$WORKERS scripts/final_ensemble_v2.sh
+    OUT=${OUT:-submissions/submission_v3_rescorer.csv}
+    NAMES="$NAMES" WEIGHTS="$WEIGHTS" OUT="$OUT" WORKERS=$WORKERS scripts/final_ensemble_v2.sh
+    record "v2 selector on $(tag_of "$NAMES" "$WEIGHTS")_w$(wsig_of "$WEIGHTS")" \
+      "$WORK/selectors_v2/$(echo "$NAMES" | tr ' ' '+')_config.json" nested_pq "$OUT"
   fi
   ;;
 
