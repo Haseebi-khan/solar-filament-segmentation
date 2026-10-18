@@ -18,7 +18,15 @@
 #   6. summary: honest nested out-of-fold PQ of every candidate and the file to upload
 # About 4-5 days in total; STOP_AFTER lets you stop at a phase boundary.
 #
+# GPU_ONLY=1 (default): only GPU work runs. No diagnostics, Stage C, blend search or GONG download/QC in the
+# background (those are CPU: LightGBM, connected components, JPEG decoding); GPU jobs run several at a time to
+# fill the 192 GB (see PARALLEL below). Run the CPU parts later with GPU_ONLY=0 (finished GPU work is skipped).
+# Unavoidable CPU use: target building (10 min, once), per-fold validation post-processing in training.
+#
 # Options (environment variables):
+#   GPU_ONLY=0          also run the background CPU/network jobs (diagnostics, Stage C rounds, GONG)
+#   ABL_PARALLEL=4      proxy folds trained at once during the ablations (small models, ~25 GB each)
+#   PARALLEL=n          force n folds at once for M1/M2/M3 (default: from the benchmark's peak memory, max 3)
 #   STOP_AFTER=prep|ablate|teachers  stop after that phase (rerun without it to continue)
 #   SKIP_ABLATIONS=1    blueprint default losses (JML1 + blob + S/D heads + deep supervision), no proxy runs
 #   SKIP_GONG=1         no download and no Stage B;   SKIP_STUDENTS=1   download, but no pseudo-labels/students
@@ -43,6 +51,7 @@ PL_VIEWS=${PL_VIEWS:-"0 4 1 3"}
 MIN_U=${MIN_U:-2000}
 NCPU=$(nproc)
 BG_WORKERS=$(( NCPU > 6 ? NCPU - 4 : 1 ))
+GPU_ONLY=${GPU_ONLY:-1}
 T_ALL=$(date +%s)
 
 say() { echo "$(date '+%F %T') | $*"; }
@@ -100,6 +109,12 @@ fallbacks_of() {  # first line = config as is; then the blueprint's fallbacks (m
     *) printf '%s\n' "" "--bs 4 --accum 2" ;;
   esac
 }
+parallel_of() {  # folds at once: as many as fit in ~88 % of GPU memory (max 3; compute is shared, so gains are modest)
+  if [ -n "${PARALLEL:-}" ]; then echo "$PARALLEL"; return; fi
+  local pk
+  pk=$(cat "$STATE/peak_$1.txt" 2>/dev/null || echo 0)
+  awk -v pk="$pk" -v gib="$GPU_GIB" 'BEGIN{ if (pk <= 0) { print 1; exit } n = int(gib * 0.88 / (pk + 4)); print (n < 1 ? 1 : (n > 3 ? 3 : n)) }'
+}
 student_of() {
   case $1 in
     m1_*) echo "m1s_${1#m1_}" ;;
@@ -109,7 +124,7 @@ student_of() {
 }
 
 choose_setting() {  # benchmark <member> with its fallbacks; writes $STATE/extra_<member>.txt (flags or FAILED)
-  local m=$1 f=$STATE/extra_$1.txt cfg budget fb out h best_h="" best_fb="" ran=0
+  local m=$1 f=$STATE/extra_$1.txt cfg budget fb out h pk best_h="" best_fb="" best_pk="" ran=0
   if [ -f "$f" ]; then return 0; fi
   cfg=$(config_of "$m")
   budget=$(budget_of "$m")
@@ -118,6 +133,7 @@ choose_setting() {  # benchmark <member> with its fallbacks; writes $STATE/extra
     # shellcheck disable=SC2086
     if out=$("$PY" src/train_v3.py --config "$cfg" --fold 0 --bench-steps 50 $LOSS $fb < /dev/null 2>&1); then
       h=$(echo "$out" | sed -n 's/.*~\([0-9.]*\) h for .*/\1/p' | tail -n 1)
+      pk=$(echo "$out" | sed -n 's/.*peak memory \([0-9.]*\) GiB.*/\1/p' | tail -n 1)
     else
       h=""
     fi
@@ -129,11 +145,12 @@ choose_setting() {  # benchmark <member> with its fallbacks; writes $STATE/extra
     ran=1
     echo "$(date '+%F %T') $m [${fb:-default}] $(echo "$out" | grep '^bench: [0-9]' | tail -n 1)" >> logs/final_v3_bench.txt
     say "  ~$h h per fold (budget $budget h)"
-    if [ -z "$best_h" ] || awk "BEGIN{exit !($h < $best_h)}"; then best_h=$h; best_fb=$fb; fi
-    if awk "BEGIN{exit !($h <= $budget)}"; then echo "$fb" > "$f"; return 0; fi
+    if [ -z "$best_h" ] || awk "BEGIN{exit !($h < $best_h)}"; then best_h=$h; best_fb=$fb; best_pk=$pk; fi
+    if awk "BEGIN{exit !($h <= $budget)}"; then echo "${pk:-0}" > "$STATE/peak_$m.txt"; echo "$fb" > "$f"; return 0; fi
   done < <(fallbacks_of "$m")
   if [ "$ran" = 1 ]; then
     say "WARNING: no setting of $m fits $budget h per fold; using the fastest (~$best_h h): ${best_fb:-config as is}"
+    echo "${best_pk:-0}" > "$STATE/peak_$m.txt"
     echo "$best_fb" > "$f"
   else
     say "WARNING: $m does not run in any setting; it is left out (logs/bench_v3_$m.out)"
@@ -143,6 +160,7 @@ choose_setting() {  # benchmark <member> with its fallbacks; writes $STATE/extra
 
 cpu_round() {  # cpu_round <label> "<names>" "<heavy names>": blend search -> v2 selector + v3 Stage C (background)
   local label=$1 names=$2 heavy=$3
+  if [ "$GPU_ONLY" = 1 ]; then say "GPU_ONLY: CPU round '$1' deferred (run: GPU_ONLY=0 scripts/run_all_v3.sh)"; return 0; fi
   local done_file
   done_file="$STATE/round_${label}_$(echo "$names" | xargs | tr ' ' '+').done"
   wait_job "$CPU_PID" round
@@ -181,6 +199,10 @@ if ! curl -sfI -m 20 https://gong2.nso.edu/ftp/HA/hag/ > /dev/null; then
   if [ -z "${SKIP_GONG:-}" ]; then say "WARNING: GONG archive unreachable: no Stage B in this run"; fi
   SKIP_GONG=1
 fi
+if [ "$GPU_ONLY" = 1 ] && [ ! -f "$FILSEG_UNLABELED/U_images.npy" ]; then
+  SKIP_GONG=1
+  say "GPU_ONLY: no GONG frames yet ($FILSEG_UNLABELED/U_images.npy), so no Stage B in this run (download with GPU_ONLY=0 later)"
+fi
 DINO=()
 for m in "${MEMBERS[@]}"; do
   case $m in
@@ -204,7 +226,9 @@ fi
 
 # =============================================================================================== 1. background jobs
 V2_SUB="submissions/submission_v3_r34_2048+effv2s_1536_w1-1_linker.csv"
-if preds_done r34_2048 && preds_done effv2s_1536; then
+if [ "$GPU_ONLY" = 1 ]; then
+  say "GPU_ONLY: Phase-0 diagnostics and Stage C on the v2 maps deferred"
+elif preds_done r34_2048 && preds_done effv2s_1536; then
   if [ ! -f logs/final_v3_diag.txt ] || [ ! -f "$V2_SUB" ]; then
     say "background: Phase-0 diagnostics, then Stage C on the v2 maps (log logs/run_all_v3_p0.out)"
     (
@@ -232,7 +256,7 @@ if [ ! -s "$LOSS_FILE" ]; then
   else
     say "loss ablations on the proxy (GPU, ~5-6 h; log logs/ablate_v3.out, results logs/final_v3_ablations.txt)"
     T=$(date +%s)
-    scripts/ablate_v3.sh > logs/ablate_v3.out 2>&1 || fail "ablations (logs/ablate_v3.out)"
+    PARALLEL=${ABL_PARALLEL:-4} scripts/ablate_v3.sh > logs/ablate_v3.out 2>&1 || fail "ablations (logs/ablate_v3.out)"
     "$PY" src/choose_losses_v3.py > logs/run_all_v3_losses.out 2>&1 || fail "loss choice (logs/run_all_v3_losses.out)"
     grep '^FLAGS ' logs/run_all_v3_losses.out | tail -n 1 | sed 's/^FLAGS //' > "$LOSS_FILE"
     timing ablations $(( $(date +%s) - T ))
@@ -257,7 +281,8 @@ for m in "${MEMBERS[@]}"; do
   if ! folds_done "$m"; then
     say "training $m, 5 folds (log logs/run_all_v3_train_$m.out; per fold logs/${m}_f<k>.out)"
     T=$(date +%s)
-    EXTRA="$LOSS $X" scripts/train_queue_v3.sh "$m" > "logs/run_all_v3_train_$m.out" 2>&1 || true
+    say "  $m: $(parallel_of "$m") fold(s) at once (peak $(cat "$STATE/peak_$m.txt" 2>/dev/null || echo ?) GiB each)"
+    PARALLEL=$(parallel_of "$m") EXTRA="$LOSS $X" scripts/train_queue_v3.sh "$m" > "logs/run_all_v3_train_$m.out" 2>&1 || true
     timing "train $m" $(( $(date +%s) - T ))
   fi
   if ! folds_done "$m"; then
@@ -305,7 +330,7 @@ if [ -z "${SKIP_GONG:-}" ] && [ -z "${SKIP_STUDENTS:-}" ]; then
       if ! folds_done "$s"; then
         say "training student $s (teacher setting: ${X:-as is})"
         T=$(date +%s)
-        EXTRA="$LOSS $X --unlabeled $FILSEG_UNLABELED --pseudo $FILSEG_UNLABELED/pl/$TT/fold{fold}.npy" \
+        PARALLEL=$(parallel_of "$t") EXTRA="$LOSS $X --unlabeled $FILSEG_UNLABELED --pseudo $FILSEG_UNLABELED/pl/$TT/fold{fold}.npy" \
           scripts/train_queue_v3.sh "$s" > "logs/run_all_v3_train_$s.out" 2>&1 || true
         timing "train $s" $(( $(date +%s) - T ))
       fi
@@ -317,6 +342,7 @@ if [ -z "${SKIP_GONG:-}" ] && [ -z "${SKIP_STUDENTS:-}" ]; then
         READY+=("$s")
         HEAVY="$HEAVY $s"
         mkdir -p "$WORK/ablations_v3"
+        if [ "$GPU_ONLY" = 1 ]; then continue; fi   # the student-vs-teacher check is CPU post-processing
         {
           echo "== student $s vs teacher $t (v1 post-processing, best threshold; gate: student OOF > teacher OOF)"
           "$PY" src/score_member_v3.py --names "$t" --out "$WORK/ablations_v3/gate_$t.csv" --workers "$BG_WORKERS" | tail -n 1
@@ -333,6 +359,12 @@ fi
 say "waiting for the background CPU jobs"
 wait_all
 timing total $(( $(date +%s) - T_ALL ))
+if [ "$GPU_ONLY" = 1 ]; then
+  say "GPU work finished (members ready: ${READY[*]}). The CPU stages were deferred; run them now with:"
+  echo "    GPU_ONLY=0 nohup scripts/run_all_v3.sh > logs/run_all_v3_cpu.out 2>&1 &"
+  echo "  (skips all finished GPU work; runs diagnostics, blend search, v2 selector, Stage C and the summary table)"
+  exit 0
+fi
 "$PY" - "$STATE/candidates.tsv" "$WORK/selectors_v2/r34_1024+rgy040_1024+r34_1536+r34_2048+effv2s_1536_config.json" <<'EOF'
 import json
 import os
