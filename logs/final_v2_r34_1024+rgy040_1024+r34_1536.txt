@@ -1,1 +1,8 @@
 == v2 final: members r34_1024 rgy040_1024 r34_1536  weights 1 1 2  morph 0
+filaments 5645  hypotheses 22556  levels [0.4, 0.5, 0.6, 0.7]  N_gt 8199
+oracle (true u): v1 extent only 0.4920   best level per filament 0.5128
+nested CV, v1 extent only: PQ 0.4386 at threshold 0.2
+nested CV, v2 selector:    PQ 0.4382 at threshold 0.23   (-0.0004 vs v1 extent)
+levels chosen for kept filaments: 0.4: 1311, 0.5: 1132, 0.6: 992, 0.7: 913
+feature gain: base_mean 6400, base_core80 5933, base_p90 5017, p_ring 1566, nn_dist 1476, contrast 1200, max 766, bbox_h 613, major 569, rho 564, i_ring 538, fill 509
+saved /root/kaggle/work/selectors_v2/r34_1024+rgy040_1024+r34_1536.pkl and /root/kaggle/work/selectors_v2/r34_1024+rgy040_1024+r34_1536_config.json
