@@ -44,6 +44,12 @@ scored by Panoptic Quality (PQ) against every annotator separately.
 `src/filseg/metric.py` reproduces the organisers' self-evaluation notebook exactly
 (verified pair by pair against its dense implementation).
 
+## v3 (in progress)
+
+DINOv3 members, soft-label losses, a multi-hypothesis candidate pool with a learned fragment linker and a
+stacked scorer, and semi-supervised training on unlabelled GONG frames: see [V3.md](V3.md) (runbook) and
+[DECISIONS.md](DECISIONS.md) (compliance and design decisions).
+
 ## Reproduce
 
 Full instructions (environment, Kaggle token, dataset download, step-by-step runs, submitting

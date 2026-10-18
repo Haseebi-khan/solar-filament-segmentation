@@ -1,0 +1,11 @@
+# Fast proxy for the loss / head ablations (blueprint section 13); scripts/ablate_v3.sh overrides fields.
+name: proxy_r34_1024_v3
+model: smp_unet
+backbone: resnet34
+size: 1024
+epochs: 60
+bs: 8
+lr: 5.0e-4
+wd: 1.0e-4
+warmup: 2.0
+eval_every: 20

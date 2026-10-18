@@ -1,0 +1,18 @@
+# M2: DPT decoder on DINOv3 ViT-L/16 at 1536 px (96x96 tokens), HR stem on the native 2048 px image.
+# Layer-wise LR decay 0.85 from the top block (enc_lr) down to the patch embedding.
+# Too slow? size 1280 (80x80 tokens).
+name: m2_vitl_1536_v3
+model: vit_dpt
+backbone: vit_large_patch16_dinov3.lvd1689m
+size: 1536
+hr_stem: true
+drop_path: 0.3
+ckpt_vit: true
+ckpt_hr: true
+epochs: 80
+bs: 8
+lr: 5.0e-4
+enc_lr: 1.0e-4
+llrd: 0.85
+wd: 0.05
+warmup: 5.0

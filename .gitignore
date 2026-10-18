@@ -33,3 +33,11 @@ access_token
 .vscode/
 .idea/
 .DS_Store
+
+# v3: resume checkpoints (model + EMA + optimiser, several GB) and bulky / regenerable artefacts
+work/models/*/*_last.pt
+work/pools_v3/
+work/linker_v3/
+work/ablations_v3/
+work/models/abl_*/
+work/unlabeled/

@@ -1,0 +1,10 @@
+# M3: v1's cheap, proven member (ImageNet ResNet-34 at 1536 px) with the v3 decoder, heads and losses.
+name: m3_r34_1536_v3
+model: smp_unet
+backbone: resnet34
+size: 1536
+epochs: 80
+bs: 8
+lr: 5.0e-4
+wd: 1.0e-4
+warmup: 2.0

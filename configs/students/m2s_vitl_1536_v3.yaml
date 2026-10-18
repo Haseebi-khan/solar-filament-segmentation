@@ -1,0 +1,21 @@
+# Stage B student of M2 (Noisy Student); see m1s_cnxl_2048_v3.yaml.
+name: m2s_vitl_1536_v3
+model: vit_dpt
+backbone: vit_large_patch16_dinov3.lvd1689m
+size: 1536
+hr_stem: true
+drop_path: 0.4
+ckpt_vit: true
+ckpt_hr: true
+epochs: 80
+bs: 8
+lr: 5.0e-4
+enc_lr: 1.0e-4
+llrd: 0.85
+wd: 0.05
+warmup: 5.0
+unlabeled: $FILSEG_UNLABELED          # default $FILSEG_WORK/unlabeled
+pseudo: $FILSEG_UNLABELED/pl/m1_cnxl_2048_v3+m2_vitl_1536_v3/fold{fold}.npy
+lambda_u: 1.0
+u_frac: 0.5
+student_aug: true

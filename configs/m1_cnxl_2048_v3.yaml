@@ -1,0 +1,19 @@
+# M1: U-Net on DINOv3 ConvNeXt-L at the native 2048 px, full-resolution detail stem, P/S/D heads.
+# Benchmark first:  python src/train_v3.py --config configs/m1_cnxl_2048_v3.yaml --fold 0 --bench-steps 50
+# Too slow? Fallbacks (blueprint 8.2): backbone convnext_base.dinov3_lvd1689m, or size 1536 (HR stem stays at 2048).
+# Out of memory? add stage 0 to ckpt_stages, or bs 2 with accum 4.
+name: m1_cnxl_2048_v3
+model: cnx_unet
+backbone: convnext_large.dinov3_lvd1689m
+size: 2048
+hr_stem: true
+drop_path: 0.2
+ckpt_stages: [1, 2]
+ckpt_hr: true
+epochs: 80
+bs: 4
+accum: 2
+lr: 5.0e-4
+enc_lr: 1.0e-4
+wd: 0.05
+warmup: 3.0

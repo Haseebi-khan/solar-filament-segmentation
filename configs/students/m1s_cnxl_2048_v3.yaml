@@ -1,0 +1,23 @@
+# Stage B student of M1 (Noisy Student). Pseudo-labels: src/pseudo_label_v3.py (teachers M1 + M2, per fold).
+# Default: fresh start from the pretrained backbone, full recipe. Short on time: add
+#   --init work/models/m1_cnxl_2048_v3/fold{k}.pt --epochs 40 --lr 2.5e-4 --enc-lr 5e-5
+name: m1s_cnxl_2048_v3
+model: cnx_unet
+backbone: convnext_large.dinov3_lvd1689m
+size: 2048
+hr_stem: true
+drop_path: 0.3
+ckpt_stages: [1, 2]
+ckpt_hr: true
+epochs: 80
+bs: 4
+accum: 2
+lr: 5.0e-4
+enc_lr: 1.0e-4
+wd: 0.05
+warmup: 3.0
+unlabeled: $FILSEG_UNLABELED          # default $FILSEG_WORK/unlabeled
+pseudo: $FILSEG_UNLABELED/pl/m1_cnxl_2048_v3+m2_vitl_1536_v3/fold{fold}.npy
+lambda_u: 1.0
+u_frac: 0.5
+student_aug: true
