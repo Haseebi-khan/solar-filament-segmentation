@@ -1,5 +1,69 @@
 {
- "v2_r34_1024+rgy040_1024+r34_1536": {
+ "v1_rescorer_in_sample": {
+  "PQ": 0.4506,
+  "SQ": 0.6768,
+  "RQ": 0.6657,
+  "TP": 5011,
+  "FP": 1844,
+  "FN": 3188,
+  "pairs_overlapping": 6561,
+  "iou_mean": 0.5923,
+  "iou_median": 0.64,
+  "dice_mean": 0.7249,
+  "dice_median": 0.7805,
+  "share_pairs_iou_gt_0.5": 0.7638,
+  "gt_to_pred (1:n)": {
+   "0": 1869,
+   "1": 6122,
+   "2": 186,
+   "3+": 22,
+   "share_1": 0.7467,
+   "share_2plus": 0.0254
+  },
+  "pred_to_gt (n:1)": {
+   "0": 544,
+   "1": 6076,
+   "2": 218,
+   "3+": 16,
+   "share_1": 0.8865,
+   "share_2plus": 0.0341
+  },
+  "semantic_dice_mean": 0.6746,
+  "csv": "/root/kaggle/work/oof_sub_r34_1024+rgy040_1024+r34_1536.csv"
+ },
+ "v2_r34_1024+rgy040_1024+r34_1536+r34_2048+effv2s_1536_nested": {
+  "PQ": 0.4438,
+  "SQ": 0.6801,
+  "RQ": 0.6524,
+  "TP": 5046,
+  "FP": 2223,
+  "FN": 3153,
+  "pairs_overlapping": 6793,
+  "iou_mean": 0.586,
+  "iou_median": 0.6396,
+  "dice_mean": 0.718,
+  "dice_median": 0.7802,
+  "share_pairs_iou_gt_0.5": 0.7428,
+  "gt_to_pred (1:n)": {
+   "0": 1706,
+   "1": 6226,
+   "2": 236,
+   "3+": 31,
+   "share_1": 0.7594,
+   "share_2plus": 0.0326
+  },
+  "pred_to_gt (n:1)": {
+   "0": 750,
+   "1": 6262,
+   "2": 238,
+   "3+": 18,
+   "share_1": 0.8616,
+   "share_2plus": 0.0352
+  },
+  "semantic_dice_mean": 0.6815,
+  "csv": "/root/kaggle/work/oof_sub_v2_r34_1024+rgy040_1024+r34_1536+r34_2048+effv2s_1536.csv"
+ },
+ "v2_r34_1024+rgy040_1024+r34_1536_nested": {
   "PQ": 0.4382,
   "SQ": 0.6769,
   "RQ": 0.6474,
