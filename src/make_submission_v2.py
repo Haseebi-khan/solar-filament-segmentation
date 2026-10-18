@@ -9,6 +9,10 @@
       --nested-scores work/selectors_v2/<members>_nested.parquet --out work/oof_sub_v2_<members>.csv
 
 The config is written by train_selector_v2.py (members, blend weights, extraction settings, selector).
+
+--morph R grows (R > 0) or shrinks (R < 0) every final mask by R px. Leave it at 0 unless the
+leaderboard probes (scripts/run_v2.sh probes) show that the test masks are drawn thinner or wider
+than the training masks; out of fold, 0 is best.
 """
 from __future__ import annotations
 
@@ -16,6 +20,7 @@ import argparse
 import json
 import os
 import pickle
+import time
 from multiprocessing import Pool
 
 import numpy as np
@@ -23,13 +28,15 @@ import pandas as pd
 
 from filseg.data import CACHE_DIR, rle_to_string
 from filseg.hypotheses_v2 import feature_matrix_v2, hypotheses, select_and_assemble
+from filseg.morph_v2 import morph_rles
 from filseg.postprocess import upsample
 from make_submission import ground_truth_frame, load_blend, score_frames, validate_submission
 
 _G = {}
 
 
-def _init(conf, split, nested_path):
+def _init(conf, split, nested_path, morph):
+    _G["morph"] = morph
     _G["probs"] = load_blend(conf["names"], conf["weights"], split)
     _G["images"] = np.load(os.path.join(CACHE_DIR, f"{'train' if split == 'oof' else 'test'}_images.npy"),
                            mmap_mode="r")
@@ -58,7 +65,7 @@ def _image_rows(args):
     else:
         x = feature_matrix_v2(rows)
         scores = np.mean([b.predict(x, num_threads=1) for b in _G["boosters"]], axis=0)
-    rles = select_and_assemble(rows, scores, _G["threshold"], labs)
+    rles = morph_rles(select_and_assemble(rows, scores, _G["threshold"], labs), _G["morph"])
     return [(f"{stem}_{k}", rle_to_string(r)) for k, r in enumerate(rles, start=1)]
 
 
@@ -68,7 +75,8 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--oof", action="store_true", help="build and score an out-of-fold CSV for the training images")
     ap.add_argument("--nested-scores", default=None, help="with --oof: use the nested out-of-fold selector scores")
-    ap.add_argument("--workers", type=int, default=18)
+    ap.add_argument("--morph", type=int, default=0, help="grow (+) / shrink (-) final masks by this many px")
+    ap.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     args = ap.parse_args()
     with open(args.config) as f:
         conf = json.load(f)
@@ -77,8 +85,11 @@ def main():
     split = "oof" if args.oof else "test"
     with open(os.path.join(CACHE_DIR, "train_meta.pkl" if args.oof else "test_meta.pkl"), "rb") as f:
         meta = pickle.load(f)
-    with Pool(args.workers, initializer=_init, initargs=(conf, split, args.nested_scores)) as pool:
+    t0 = time.time()
+    with Pool(args.workers, initializer=_init, initargs=(conf, split, args.nested_scores, args.morph)) as pool:
         parts = pool.map(_image_rows, list(enumerate(meta["stems"])), chunksize=2)
+    print(f"post-processing: {time.time() - t0:.0f} s for {len(meta['stems'])} images on {args.workers} workers"
+          f"{f', masks morphed by {args.morph:+d} px' if args.morph else ''}")
     df = pd.DataFrame([r for rows in parts for r in rows], columns=["filament_id", "segmentation_rle"])
     validate_submission(df)
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)

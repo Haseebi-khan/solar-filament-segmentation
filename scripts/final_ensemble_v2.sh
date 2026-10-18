@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # v2 final stage on the out-of-fold maps of the ensemble members.
 #   NAMES="..." scripts/final_ensemble_v2.sh                   -> blend-weight search (logs/final_v2_<members>.txt)
-#   NAMES="..." WEIGHTS="..." scripts/final_ensemble_v2.sh     -> extent selector, exact OOF score, test CSV
-# Optional: WEIGHT_GRID="1 1 2 0 0,1 1 2 2 2" (comma-separated) for the search, OUT=<csv> for the submission.
+#   NAMES="..." WEIGHTS="..." scripts/final_ensemble_v2.sh     -> extent selector, exact OOF score, rubric
+#                                                                 evaluation, test CSV
+# Optional: WEIGHT_GRID="1 1 2 0 0,1 1 2 2 2" (comma-separated) for the search; OUT=<csv> for the submission;
+# MORPH=-1 / MORPH=1 shrinks / grows the test masks by 1 px (only if a leaderboard probe showed it helps);
+# WORKERS=<n> CPU processes for post-processing (default: all cores but one).
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 PY=${PY:-$ROOT/.venv/bin/python}
@@ -10,7 +13,14 @@ WORK=${FILSEG_WORK:-$ROOT/work}
 read -r -a NAMES <<< "${NAMES:-r34_1024 rgy040_1024 r34_1536 r34_2048 effv2s_1536}"
 TAG=$(IFS=+; echo "${NAMES[*]}")
 LOG=$ROOT/logs/final_v2_${TAG}.txt
-OUT=${OUT:-$ROOT/submissions/submission_v2.csv}
+MORPH=${MORPH:-0}
+WORKERS=${WORKERS:-$(( $(nproc) - 1 ))}
+case "$MORPH" in
+  0) SUFFIX="" ;;
+  -*) SUFFIX="_erode${MORPH#-}" ;;
+  *) SUFFIX="_dilate${MORPH}" ;;
+esac
+OUT=${OUT:-$ROOT/submissions/submission_v2${SUFFIX}.csv}
 mkdir -p "$ROOT/logs"
 
 if [ -z "${WEIGHTS:-}" ]; then
@@ -34,10 +44,13 @@ fi
 read -r -a W <<< "$WEIGHTS"
 [ ${#W[@]} -eq ${#NAMES[@]} ] || { echo "WEIGHTS needs ${#NAMES[@]} values"; exit 1; }
 SEL=$WORK/selectors_v2/$TAG
-echo "== v2 final: members ${NAMES[*]}  weights ${W[*]}" | tee -a "$LOG"
-"$PY" "$ROOT/src/train_selector_v2.py" --names "${NAMES[@]}" --weights "${W[@]}" --out "$SEL.pkl" 2>&1 \
-  | grep -v -i warn | tee -a "$LOG"
+OOF_CSV=$WORK/oof_sub_v2_${TAG}.csv
+echo "== v2 final: members ${NAMES[*]}  weights ${W[*]}  morph ${MORPH}" | tee -a "$LOG"
+"$PY" "$ROOT/src/train_selector_v2.py" --names "${NAMES[@]}" --weights "${W[@]}" --workers "$WORKERS" \
+  --out "$SEL.pkl" 2>&1 | grep -v -i warn | tee -a "$LOG"
 "$PY" "$ROOT/src/make_submission_v2.py" --config "${SEL}_config.json" --oof --nested-scores "${SEL}_nested.parquet" \
-  --out "$WORK/oof_sub_v2_${TAG}.csv" 2>&1 | grep -v -i warn | sed 's/^/[OOF] /' | tee -a "$LOG"
-"$PY" "$ROOT/src/make_submission_v2.py" --config "${SEL}_config.json" --out "$OUT" 2>&1 \
-  | grep -v -i warn | tee -a "$LOG"
+  --workers "$WORKERS" --out "$OOF_CSV" 2>&1 | grep -v -i warn | sed 's/^/[OOF] /' | tee -a "$LOG"
+"$PY" "$ROOT/src/evaluate_v2.py" "$OOF_CSV" --labels "v2_${TAG}" --out "$WORK/eval_v2" 2>&1 \
+  | grep -v -i warn | sed 's/^/[rubric] /' | tee -a "$LOG"
+"$PY" "$ROOT/src/make_submission_v2.py" --config "${SEL}_config.json" --morph "$MORPH" --workers "$WORKERS" \
+  --out "$OUT" 2>&1 | grep -v -i warn | tee -a "$LOG"

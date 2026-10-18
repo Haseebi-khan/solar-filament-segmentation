@@ -108,7 +108,7 @@ def main():
     ap.add_argument("--min-area", type=int, default=100)
     ap.add_argument("--levels", type=float, nargs="+", default=list(LEVELS))
     ap.add_argument("--rounds", type=int, default=400)
-    ap.add_argument("--workers", type=int, default=18)
+    ap.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
     weights = args.weights or [1.0] * len(args.names)
