@@ -1,0 +1,1 @@
+== v2 final: members r34_1024 rgy040_1024 r34_1536  weights 1 1 2  morph 0

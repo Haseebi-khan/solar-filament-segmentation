@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# v2 pipeline, run stage by stage (each stage skips work that is already on disk):
+# v2 pipeline, run stage by stage (each stage skips work that is already on disk).
+# To run every stage in order with one command, use scripts/run_all_v2.sh.
 #
 #   scripts/run_v2.sh selector-v1   # extent selector on the 3 trained v1 members -> submissions/submission_v2_v1members.csv
 #   scripts/run_v2.sh probes        # leaderboard probes: v1 submission with masks shrunk / grown by 1 px
