@@ -225,7 +225,7 @@ WEIGHTS="1 1 2" scripts/final_ensemble.sh         # rescorer + OOF score + submi
 
 ## 8. Reproduce the final submission from the weights
 
-No training; about 1 GPU-hour. Needs the data (section 5) and the M5 weights (section 2). The notebook
+No training; about 40 minutes on one MI300X. Needs the data (section 5) and the M5 weights (section 2). The notebook
 `submission_package_v3/notebook/reproduce_v3.ipynb` runs these steps in a separate work directory
 (`work_reproduce/`) and compares the result with the submitted file:
 
@@ -249,7 +249,8 @@ POOL=$FILSEG_WORK/pools_v3/r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1_linker
 .venv/bin/python src/make_submission_v3.py --config /tmp/scorer_config.json --out submissions/submission_v3_reproduced.csv
 ```
 
-GPU inference in bf16 is not bit-exact across machines, so a few boundary pixels may differ from the submitted file.
+GPU inference in bf16 is not bit-exact, so a few boundary pixels may differ from the submitted file. Our own run of the
+notebook (40 min on one MI300X) reproduced 1,061 of the 1,067 submitted masks bit-identically; 1,066 match with IoU >= 0.999 and one differs by 74 px (IoU 0.95), as expected from non-deterministic bf16 GPU inference.
 
 ## 9. Submit to Kaggle
 

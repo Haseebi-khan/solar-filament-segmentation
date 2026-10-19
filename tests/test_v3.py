@@ -207,10 +207,13 @@ def test_models_forward_cpu():
 # ----------------------------------------------------------------------------------------------- train CLI
 def test_train_cli_parses_every_config_and_override():
     import glob
+    import train_rater_v3
     import train_v3
     root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
     for path in sorted(glob.glob(os.path.join(root, "configs", "*.yaml")) + glob.glob(os.path.join(root, "configs", "students", "*.yaml"))):
-        c = train_v3.parse_config(["--config", path, "--fold", "1", "--resume", "--region", "dml", "--w-blob", "0",
+        with open(path) as f:   # M6 configs carry rater_* keys and belong to train_rater_v3.py (a TrainConfig subclass)
+            parser = train_rater_v3 if "rater_dim" in f.read() else train_v3
+        c = parser.parse_config(["--config", path, "--fold", "1", "--resume", "--region", "dml", "--w-blob", "0",
                                    "--w-sr", "0.5", "--no-aux-heads", "--no-deep-sup", "--ckpt-stages", "0", "1",
                                    "--bs", "4", "--accum", "2", "--size", "1280", "--bench-steps", "50",
                                    "--stem-ch", "8", "16", "--no-stem-native"])

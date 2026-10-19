@@ -105,6 +105,10 @@ masks are not systematically thinner or wider, so the final submission uses unmo
   asset together with the DINOv3 License text, as the licence requires for derivatives. M4 is not part of the final
   blend and is not released.
 - **Reproduction.** `submission_package_v3/notebook/reproduce_v3.ipynb` rebuilds the final CSV from the weights,
-  the shipped linker and the shipped scorer (`submission_package_v3/release/stagec_final/`).
+  the shipped linker and the shipped scorer (`submission_package_v3/release/stagec_final/`). Run on 2026-10-19: it
+  reproduced 1,061 of the 1,067 submitted masks bit-identically; 1,066 match with IoU >= 0.999 and one differs by 74 px (IoU 0.95), as expected from non-deterministic bf16 GPU inference.
+- **Report.** The organisers require their ACM `acmart` template (Overleaf). `submission_package_v3/report/main.tex`
+  keeps all fixed template text; our references are in `ours.bib`. The earlier IEEEtran draft was removed. Error
+  bars are per-image bootstrap 95 % intervals and the spread over the 5 folds (`tools/report_figures_v3.py`).
 - **Not used for the submission.** `src/train_rater_v3.py` (annotator-conditioned head, M6) was written and
   unit-tested on the CPU but never trained, for budget reasons.

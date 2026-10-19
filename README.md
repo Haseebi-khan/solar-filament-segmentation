@@ -8,8 +8,8 @@ nested out-of-fold PQ **0.4477** on the 707 training images, public leaderboard 
 
 | you want to | go to |
 |---|---|
-| read the method and the results | [REPORT.md](REPORT.md) (LaTeX/PDF version: [submission_package_v3/report/](submission_package_v3/report/)) |
-| reproduce the final CSV from the trained weights (~1 GPU-hour) | [submission_package_v3/notebook/reproduce_v3.ipynb](submission_package_v3/notebook/reproduce_v3.ipynb), [SETUP.md §8](SETUP.md#8-reproduce-the-final-submission-from-the-weights) |
+| read the method and the results | [REPORT.md](REPORT.md); the submitted 4-page report (organisers' ACM template) is [submission_package_v3/report/](submission_package_v3/report/) |
+| reproduce the final CSV from the trained weights (~40 min on one GPU; verified, see below) | [submission_package_v3/notebook/reproduce_v3.ipynb](submission_package_v3/notebook/reproduce_v3.ipynb), [SETUP.md §8](SETUP.md#8-reproduce-the-final-submission-from-the-weights) |
 | retrain everything | [SETUP.md §6](SETUP.md#6-train-the-final-system) |
 | check data use and design decisions | [DECISIONS.md](DECISIONS.md) |
 | see every candidate and its score | [`work/v3_state/candidates.tsv`](work/v3_state/candidates.tsv), `logs/final_*.txt` |
@@ -60,6 +60,8 @@ nested out-of-fold PQ **0.4477** on the 707 training images, public leaderboard 
 | v2: r34_2048 + effv2s_1536 + extent selector | 0.4438 | 0.38 |
 | v2 selector + M3 (ResNet-34, v3 loss) | 0.4449 | 0.38 |
 | **final: Stage C on r34_2048 + effv2s_1536 + M5** | **0.4477** | **0.39** |
+
+**Reproduced:** running the notebook on our server rebuilt 1,061 of the 1,067 submitted masks bit-identically; 1,066 match with IoU >= 0.999 and one differs by 74 px (IoU 0.95), as expected from non-deterministic bf16 GPU inference (`submissions/submission_v3_reproduced.csv`).
 
 REPORT.md explains the ~0.06 gap between out-of-fold and public scores. It is not chance and not mask width; the
 most likely cause is an annotator shift.

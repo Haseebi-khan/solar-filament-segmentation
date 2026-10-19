@@ -270,7 +270,9 @@ annotator-conditioned network (`src/train_rater_v3.py`).
   `logs/final_v3_stagec_r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1.txt`). Zero-weight members are skipped.
 - Reproduction from the trained weights without training: `submission_package_v3/notebook/reproduce_v3.ipynb`
   (SETUP.md §8). The M5 weights are attached to the GitHub release `v3-final`; the linker and the scorer are in
-  `submission_package_v3/release/stagec_final/`.
+  `submission_package_v3/release/stagec_final/`. Our run of the notebook reproduced 1,061 of the 1,067 submitted masks bit-identically; 1,066 match with IoU >= 0.999 and one differs by 74 px (IoU 0.95), as expected from non-deterministic bf16 GPU inference.
+- The submitted 4-page report uses the organisers' ACM template: `submission_package_v3/report/main.tex`
+  (figures and uncertainty numbers from `tools/report_figures_v3.py`).
 - Design and compliance decisions with dates: `DECISIONS.md`. v3 runbook: `V3.md`.
 - Unit tests: `tests/test_v3.py`. Stage C smoke test: `tests/smoke_stagec_v3.py`.
 
