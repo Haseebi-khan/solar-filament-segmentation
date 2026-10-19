@@ -48,3 +48,6 @@ work/models/m5_cnxs_1536_v3/*.pt
 # Reproduction run of the submission package and release assets (regenerable / uploaded separately)
 work_reproduce/
 release_v3/
+
+# Local working notes (not part of the submission)
+HANDOFF_V3.md

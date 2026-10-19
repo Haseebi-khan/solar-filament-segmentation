@@ -1,6 +1,6 @@
 # M6 (rater-aware DINOv3 member): M4's network (ViT-B/16 + DPT at 1536 px, light detail stem) with a different seed
 # plus the annotator-conditioned residual head of src/train_rater_v3.py. If the rater head turns out neutral this is
-# still the second ViT-B member that HANDOFF_V3.md section 8 names as the most likely ensemble gain.
+# still a second ViT-B member, the most likely ensemble gain after M4 (not trained; see DECISIONS.md 2026-10-19).
 # Run with src/train_rater_v3.py (train_v3.py rejects the rater_* keys). Measured M4 cost: 1.19-1.33 h per fold.
 name: m6_rater_vitb_1536_v3
 seed: 1

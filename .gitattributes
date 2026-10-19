@@ -1,4 +1,2 @@
-# Model checkpoints (~100 MB each) and rescorers are stored with Git LFS
-*.pt filter=lfs diff=lfs merge=lfs -text
-*.pth filter=lfs diff=lfs merge=lfs -text
-work/rescorers/*.pkl filter=lfs diff=lfs merge=lfs -text
+# Checkpoints are stored as ordinary git files (each under GitHub's 100 MB limit); larger checkpoints are attached
+# to GitHub releases instead (see SETUP.md section 2). No Git LFS is needed to clone this repository.

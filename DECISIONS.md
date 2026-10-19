@@ -84,3 +84,27 @@ v1 and v2 files are unchanged and still reproduce 0.4381 / 0.4438.
 Public leaderboard: submission_v2.csv 0.38, the same masks eroded by 1 px 0.37, dilated by 1 px 0.35. The test
 masks are not systematically thinner or wider, so the final submission uses unmorphed masks. The `_erode1` and
 `_dilate1` copies written by run_all_v3.sh are not to be used. The OOF -> public gap (~0.06) remains unexplained.
+
+## 2026-10-19: final selection and submission package
+
+- **Final submission.** Stage C on `r34_2048 + effv2s_1536 + m5_cnxs_1536_v3` (weights 1 1 1), nested out-of-fold
+  PQ 0.4477, the highest of all candidates in `work/v3_state/candidates.tsv` (next: v2 selector on the same members,
+  0.4455). It is unmorphed; the `_erode1` / `_dilate1` copies written by `run_all_v3.sh` are not used (see the
+  2026-10-18 probe result).
+- **Extraction threshold of v3-loss members.** Soft targets with JML1 give softer maps (mean foreground probability
+  0.80 vs 0.90 for BCE + Dice members). Alone, M3 scores 0.4131 at t_seed = t_mask = 0.6 but 0.4303 at 0.4, M4
+  0.4268 vs 0.4410. `blend_search_v3.py` and `final_ensemble_v2.sh` use 0.6 for every blend, which is why the
+  after-M4 and final blends gave M4 weight 0. `src/blend_search_tuned_v3.py` and `scripts/final_ensemble_v3.sh`
+  tune the threshold per blend. They were written after the final run and have not been used for the submission.
+- **Leaderboard gap analysis (no leaderboard tuning).** Random 90-image subsets of the out-of-fold predictions
+  have SD 0.012, so the ~0.06 gap is not chance. 5-fold averaging shifts the test maps by ~1 % in foreground
+  fraction. Out-of-fold PQ ranges 0.40-0.55 across annotator groups, which makes an annotator shift between
+  training and test labels the most likely cause. None of this was used to change the submission.
+- **Weights in the repository.** Checkpoints under 100 MB are ordinary git files (Git LFS was never active, so the
+  LFS rules were removed from `.gitattributes`). The M5 checkpoints (5 x 240 MB) are released as a GitHub release
+  asset together with the DINOv3 License text, as the licence requires for derivatives. M4 is not part of the final
+  blend and is not released.
+- **Reproduction.** `submission_package_v3/notebook/reproduce_v3.ipynb` rebuilds the final CSV from the weights,
+  the shipped linker and the shipped scorer (`submission_package_v3/release/stagec_final/`).
+- **Not used for the submission.** `src/train_rater_v3.py` (annotator-conditioned head, M6) was written and
+  unit-tested on the CPU but never trained, for budget reasons.

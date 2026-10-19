@@ -265,8 +265,12 @@ annotator-conditioned network (`src/train_rater_v3.py`).
 - Environment: `SETUP.md` (ROCm 7.2 PyTorch, pinned `requirements.txt`).
 - v1: `scripts/run_pipeline.sh`. v2: `scripts/run_v2.sh`. v3: `scripts/run_all_v3.sh` (resumable; every
   candidate with its nested PQ and submission file is listed in `work/v3_state/candidates.tsv`).
-- Final submission: `NAMES="r34_2048 effv2s_1536 m5_cnxs_1536_v3" WEIGHTS="1 1 1" scripts/run_v3.sh stagec`
-  (written by `scripts/run_all_v3.sh`; log `logs/final_v3_stagec_r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1.txt`).
+- Final submission: `NAMES="r34_2048 effv2s_1536 m3_r34_1536_v3 m4_vitb_1536_v3 m5_cnxs_1536_v3" WEIGHTS="1 1 0 0 1"
+  scripts/run_v3.sh stagec` (written by `scripts/run_all_v3.sh`; log
+  `logs/final_v3_stagec_r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1.txt`). Zero-weight members are skipped.
+- Reproduction from the trained weights without training: `submission_package_v3/notebook/reproduce_v3.ipynb`
+  (SETUP.md §8). The M5 weights are attached to the GitHub release `v3-final`; the linker and the scorer are in
+  `submission_package_v3/release/stagec_final/`.
 - Design and compliance decisions with dates: `DECISIONS.md`. v3 runbook: `V3.md`.
 - Unit tests: `tests/test_v3.py`. Stage C smoke test: `tests/smoke_stagec_v3.py`.
 
