@@ -10,7 +10,7 @@ so annotator disagreement, not pixel accuracy, limits every honest system. We tr
 soft consensus targets. We show that PQ is exactly additive over disjoint predicted instances, and we use this to
 tune post-processing and to train instance scorers with nested cross-validation. Our best system (ResNet-34,
 EfficientNetV2-S and DINOv3 ConvNeXt-S members, a hypothesis pool and a stacked scorer) reaches a nested
-out-of-fold PQ of **0.4477** on the 707 training images. Earlier systems scored 0.38 on the public leaderboard. We
+out-of-fold PQ of **0.4477** on the 707 training images and **0.39** on the public leaderboard (earlier systems: 0.38). We
 report the error breakdown, the ceilings, the leaderboard gap and its most likely cause, and the ideas that did not work.
 
 ## 1. Data
@@ -162,7 +162,7 @@ nested scores.
 | v2 selector on r34_2048 + effv2s_1536 + M3 | 0.4449 | 0.682 | 0.652 | 0.38 |
 | 4-member blend incl. M4, tuned extraction threshold, before selection | 0.4414 | | | |
 | v2 selector on r34_2048 + effv2s_1536 + M5 | 0.4455 | | | |
-| **final: Stage C on r34_2048 + effv2s_1536 + M5 (weights 1 1 1)** | **0.4477** | 0.683 | 0.655 | **[fill in after upload]** |
+| **final: Stage C on r34_2048 + effv2s_1536 + M5 (weights 1 1 1)** | **0.4477** | 0.683 | 0.655 | **0.39** |
 
 The final file is `submissions/submission_v3_r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1_linker.csv` (1,067
 filaments on 179 of 180 test images).
@@ -208,7 +208,7 @@ and 0402, 0.52-0.55 for 0204 and 0304).
 
 ### 4.4 Public leaderboard and the out-of-fold gap
 
-All our submissions score 0.38 on the public leaderboard (shown with two decimals), about 0.06 below the
+Our submissions score 0.38-0.39 on the public leaderboard (shown with two decimals), about 0.06 below the
 out-of-fold PQ. Other teams report the same gap. What we checked:
 - **Not chance.** Random 90-image subsets of our out-of-fold predictions have SD 0.012, and a subset scores
   <= 0.385 with probability < 0.0003.

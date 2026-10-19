@@ -1,103 +1,84 @@
 # Final submission checklist: Solar Filament Segmentation Challenge 2026
 
-**Deadline: Sunday 16 November 2026, 09:59 PKT** (15 Nov, 23:59 CDT). Do the steps in this order: later steps need
-links from earlier ones.
+**Deadline: Sunday 16 November 2026, 09:59 PKT** (15 Nov, 23:59 CDT).
+Kaggle team **"Umer Gulzar"** (haseebekhan, umergulzar).
+
+## Status
+
+| step | what | status |
+|---|---|---|
+| 1 | Kaggle: `submission_v3_final.csv` uploaded | **done**: public 0.39 (rank 188 / 1,068 on 19 Oct) |
+| 2 | Report filled in (score, team) and compiled | **done**: `report/report.pdf` (3 pages) |
+| 3 | Code on GitHub (Haseeb pushes, Umer merges) | **done** for everything up to this checklist |
+| 4 | Kaggle: select the final submissions | **you** (2 min) |
+| 5 | GitHub release with the M5 weights | **you** (zip is ready on the server) |
+| 6 | Make the repository public | **you** (1 min) |
+| 7 | Google form | **you** |
+| 8 | Shut down the GPU server | **you** |
 
 ## What is in this folder, and where each file goes
 
 | file | what it is | where it goes |
 |---|---|---|
-| `kaggle/submission_v3_final.csv` | final predictions (nested OOF PQ 0.4477) | Kaggle, "Submit Prediction" (step 1) |
-| `report/report.tex` + `report/figures/` | 4-page report, IEEE format | Overleaf, then the PDF goes to the Google form (steps 5, 7) |
-| `notebook/reproduce_v3.ipynb` | rebuilds the CSV from the weights | GitHub repo (and Kaggle Code if the form asks) (step 4) |
-| `release/make_release_v3.sh` | packs the M5 weights with the DINOv3 licence | run on the server, upload the zip as a GitHub Release (step 3) |
-| `release/LICENSE_DINOv3.md` | official DINOv3 licence (required next to DINOv3 weights) | inside the release zip and the repo |
-| `release/stagec_final/` | fragment linker + stacked scorer of the final system | GitHub repo (already in this folder) |
+| `kaggle/submission_v3_final.csv` | final predictions (OOF PQ 0.4477, public 0.39) | Kaggle (already uploaded) |
+| `report/report.pdf` | 4-page-limit report (3 pages), IEEE format | Google form |
+| `report/report.tex` + `report/figures/` | LaTeX source of the PDF | repo (already there); Overleaf only if the organisers want their template |
+| `notebook/reproduce_v3.ipynb` | rebuilds the CSV from the weights | repo (already there); link it in the form |
+| `release/LICENSE_DINOv3.md`, `release/make_release_v3.sh` | DINOv3 licence, builds the weights zip | repo (already there) |
+| `release/stagec_final/` | fragment linker + stacked scorer of the final system | repo (already there) |
+| server: `/root/kaggle/release_v3/m5_cnxs_1536_v3_weights.zip` (+ `.sha256`) | M5 weights + licence, 1.2 GB | GitHub release (step 5) |
+| server: `/root/kaggle/release_v3/submission_package_v3.zip` | this whole folder in one file, 25 MB | your computer (backup, form attachments) |
 
 ---
 
-## Step 1. Upload the predictions to Kaggle
+## Step 4. Select the final submissions on Kaggle
 
-1. Open https://www.kaggle.com/competitions/filament-segmentation-2026 and click **Submit Prediction**.
-2. Upload `submission_package_v3/kaggle/submission_v3_final.csv`.
-   Description: `v3 final: Stage C on r34_2048 + effv2s_1536 + M5 (OOF 0.4477)`.
-3. When it is scored, write the public score down. Expect 0.38-0.39: the gain over earlier files is too small for two
-   decimals.
-4. Open the **Submissions** tab and select **two** final submissions:
-   `submission_v3_final.csv` and, as a backup, `submission_v3_rescorer_after_m3.csv` (public 0.38).
-   Never select the `_erode1` / `_dilate1` files.
+https://www.kaggle.com/competitions/filament-segmentation-2026/submissions: tick **Use for Final Score** on
+`submission_v3_final.csv` (0.39) and on `submission_v3_rescorer_after_m3.csv` (0.38) as the backup.
+Never select the `_erode1` / `_dilate1` files.
 
-## Step 2. Put the score into the report
+## Step 5. GitHub release with the M5 weights
 
-- `report/report.tex`, line 13: replace `\textbf{[fill in]}` in `\finalLB` with the score (for example `0.38`).
-- Same file, lines 14-15 and 23: Kaggle team name, both members' affiliation and e-mail. Check the author
-  names; I used `Haseeb Khan and Muhammad Umer`.
-- `REPORT.md` (repo root), results table: replace `[fill in after upload]`.
-
-## Step 3. Release the M5 weights (GitHub refuses files over 100 MB)
-
-The final blend needs the M5 weights (5 x 240 MB). `r34_2048` and `effv2s_1536` are already in git.
-
-1. On the server:
-   ```bash
-   cd /root/kaggle && submission_package_v3/release/make_release_v3.sh
-   ```
-   It writes `release_v3/m5_cnxs_1536_v3_weights.zip` (~1.2 GB) and its `.sha256` file.
-2. Copy both files to your computer (VS Code: right-click the files in `release_v3/`, then **Download**), or upload
-   from the server with the GitHub web page open in a browser on your computer.
-3. On GitHub, logged in as **umerkang66**: open https://github.com/umerkang66/solar-filament-segmentation, then
-   **Releases** (right sidebar), **Draft a new release**.
-   - Tag: `v3-final`, target: `master` (after step 4.2).
-   - Title: `v3 final submission weights`.
-   - Attach `m5_cnxs_1536_v3_weights.zip` and `m5_cnxs_1536_v3_weights.zip.sha256` (limit 2 GB per file).
-   - Text: `M5 (DINOv3 ConvNeXt-S U-Net) fold checkpoints for the final submission. DINOv3 License: see LICENSE_DINOv3.md inside the zip.`
+1. Download the two files to your computer. In VS Code's Explorer, open `release_v3/`, right-click
+   `m5_cnxs_1536_v3_weights.zip`, choose **Download...**, and do the same for `m5_cnxs_1536_v3_weights.zip.sha256`.
+   It is 1.2 GB, so the download takes a while.
+2. Logged in to GitHub as **umerkang66**: open https://github.com/umerkang66/solar-filament-segmentation/releases/new
+   - **Choose a tag**: type `v3-final`, then **Create new tag: v3-final on publish**. Target: `master`.
+   - **Release title**: `v3 final submission weights`
+   - **Description**:
+     `M5 (DINOv3 ConvNeXt-S U-Net, 5 folds) checkpoints of the final submission (nested OOF PQ 0.4477, public LB 0.39). Unzip inside work/models/ (see SETUP.md section 2). The fine-tuned DINOv3 weights are distributed under the DINOv3 License, included in the zip as LICENSE_DINOv3.md.`
+   - Drag both files into **Attach binaries** (GitHub allows up to 2 GB per file) and wait until both finish uploading.
    - **Publish release**.
+3. Check that https://github.com/umerkang66/solar-filament-segmentation/releases/tag/v3-final shows both files. README
+   and SETUP already link to this address.
 
-## Step 4. Code on GitHub (public)
+## Step 6. Make the repository public
 
-1. Push this folder with the Haseeb account:
-   ```bash
-   cd /root/kaggle && git add -A && git commit -m "Submission package v3" && git push haseeb v3-budget-run
-   ```
-2. Merge with the Umer account: logged in as umerkang66, open
-   https://github.com/umerkang66/solar-filament-segmentation/compare/master...Haseebi-khan:solar-filament-segmentation:v3-budget-run
-   then **Create pull request** and **Merge pull request**.
-3. Make the repository public: **Settings**, **General**, at the bottom **Danger Zone**, **Change visibility**,
-   **Public**.
-4. Recommended (about 1 GPU-hour, ~$2): run `notebook/reproduce_v3.ipynb` once on the server, to prove the CSV
-   can be reproduced. The last cell should show the same number of filaments and a mean IoU of about 1. Commit the
-   executed notebook (step 4.1 again). If the competition wants a **Kaggle notebook**: Kaggle, **Code**,
-   **New Notebook**, **File**, **Import Notebook**, choose `reproduce_v3.ipynb`. On Kaggle it also needs the
-   competition data and the weights added as inputs.
-
-## Step 5. Report PDF (Overleaf)
-
-1. Zip the `report/` folder (`report.tex` and `figures/rubric_final.png`).
-2. https://www.overleaf.com, then **New Project**, **Upload Project**, choose the zip.
-3. Menu: compiler **pdfLaTeX**, then **Recompile**. Check that it is at most 4 pages (if longer, shorten the
-   "What did not work" paragraph first).
-4. If the organisers give their own template: open it in Overleaf and paste everything from `\begin{abstract}` to
-   `\end{thebibliography}` into it, and upload `figures/rubric_final.png`.
-5. **Download PDF**. Suggested name: `report_<teamname>.pdf`.
-
-## Step 6. Final checks before the form
-
-- [ ] Kaggle: `submission_v3_final.csv` scored and selected (step 1).
-- [ ] Repo public, `master` contains this folder, the release `v3-final` has the M5 zip (steps 3, 4).
-- [ ] Report PDF compiled with the real score, team name and affiliations (steps 2, 5).
-- [ ] No leaked data anywhere: the public MAGFiLO v1.0 Kaggle dataset was never used (also stated in the report).
+https://github.com/umerkang66/solar-filament-segmentation/settings: at the bottom, **Danger Zone**, then **Change
+repository visibility**, **Change to public**, and confirm.
 
 ## Step 7. Google form
 
-Open the form from the competition page (**Overview** / **Rules** / discussion announcement). Keep these ready:
+Open the form from the competition page (**Overview**, **Rules** or the organisers' announcement). Have ready:
 
-- Kaggle team name and every member's Kaggle username.
-- Repository: https://github.com/umerkang66/solar-filament-segmentation
-- Weights: the release link from step 3 (`.../releases/tag/v3-final`).
-- Report: the PDF from step 5.
-- Notebook: the repo path `submission_package_v3/notebook/reproduce_v3.ipynb` (or the Kaggle notebook link).
-- Final score: nested out-of-fold PQ 0.4477, public leaderboard from step 1.
+| field (likely) | answer |
+|---|---|
+| Kaggle team name | Umer Gulzar |
+| members / Kaggle usernames | Haseeb Khan (haseebekhan), Muhammad Umer (umergulzar) |
+| public repository | https://github.com/umerkang66/solar-filament-segmentation |
+| report | `report/report.pdf` (from `submission_package_v3.zip`) |
+| notebook | https://github.com/umerkang66/solar-filament-segmentation/blob/master/submission_package_v3/notebook/reproduce_v3.ipynb |
+| weights | https://github.com/umerkang66/solar-filament-segmentation/releases/tag/v3-final |
+| final score | public leaderboard 0.39; nested out-of-fold PQ 0.4477 |
 
-## Step 8. Stop paying
+If the form needs affiliations or e-mails, they are not in the report. Add them to `report/report.tex` (line 24),
+then recompile:
+`cd submission_package_v3/report && pdflatex report.tex && pdflatex report.tex`.
 
-When everything is uploaded, **shut down the GPU instance**. It bills $1.99/h even when idle.
+## Step 8. Shut down the GPU server
+
+Once steps 5 and 7 are done (the zip downloads from this server), shut the instance down. It bills $1.99/h even
+when idle.
+
+Optional before shutting down (about 1 GPU-hour, ~$2): run `notebook/reproduce_v3.ipynb` once, to prove that the CSV
+can be reproduced from the weights.

@@ -4,7 +4,7 @@ Instance segmentation of solar filaments in GONG H-alpha full-disk images (MAGFi
 (PQ) against every annotator separately.
 
 **Final submission:** [`submission_package_v3/kaggle/submission_v3_final.csv`](submission_package_v3/kaggle/submission_v3_final.csv),
-nested out-of-fold PQ **0.4477** on the 707 training images (public leaderboard 0.38 for our earlier systems).
+nested out-of-fold PQ **0.4477** on the 707 training images, public leaderboard **0.39** (Kaggle team "Umer Gulzar").
 
 | you want to | go to |
 |---|---|
@@ -59,7 +59,7 @@ nested out-of-fold PQ **0.4477** on the 707 training images (public leaderboard 
 | v1: 3 U-Nets + LightGBM rescorer | 0.4381 | 0.38 |
 | v2: r34_2048 + effv2s_1536 + extent selector | 0.4438 | 0.38 |
 | v2 selector + M3 (ResNet-34, v3 loss) | 0.4449 | 0.38 |
-| **final: Stage C on r34_2048 + effv2s_1536 + M5** | **0.4477** | see REPORT.md |
+| **final: Stage C on r34_2048 + effv2s_1536 + M5** | **0.4477** | **0.39** |
 
 REPORT.md explains the ~0.06 gap between out-of-fold and public scores. It is not chance and not mask width; the
 most likely cause is an annotator shift.

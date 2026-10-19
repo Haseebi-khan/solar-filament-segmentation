@@ -9,9 +9,10 @@
 \usepackage{booktabs}
 \usepackage{url}
 \usepackage[hidelinks]{hyperref}
+\setlength{\tabcolsep}{4pt}   % narrower table columns so every table fits the column width
 
-\newcommand{\finalLB}{\textbf{[fill in]}}          % public leaderboard score of submission_v3_final.csv
-\newcommand{\teamname}{[Kaggle team name]}
+\newcommand{\finalLB}{0.39}                         % public leaderboard score of submission_v3_final.csv
+\newcommand{\teamname}{Umer Gulzar}
 \newcommand{\repourl}{\url{https://github.com/umerkang66/solar-filament-segmentation}}
 
 \begin{document}
@@ -20,7 +21,7 @@
 DINOv3 Members and PQ-Additive Instance Selection}
 
 \author{\IEEEauthorblockN{Haseeb Khan and Muhammad Umer}
-\IEEEauthorblockA{Team \teamname\\ Affiliation and e-mail: \textit{fill in}}}
+\IEEEauthorblockA{Kaggle team ``\teamname'' (haseebekhan, umergulzar)}}
 
 \maketitle
 
@@ -176,7 +177,7 @@ predictions and 10\,\% from fragments and merges. Small filaments are the weakes
 recall 0.36), followed by the limb ($r/R>0.8$: PQ 0.37). PQ is uniform across sites (0.43--0.45) and across the
 number of annotators per image (0.44/0.46/0.44). It is \emph{not} uniform across annotator groups (0.40--0.55).
 
-\textbf{Leaderboard gap.} Our submissions score 0.38 publicly, ${\sim}0.06$ below out-of-fold, and other teams
+\textbf{Leaderboard gap.} Our submissions score 0.38--0.39 publicly, ${\sim}0.06$ below out-of-fold, and other teams
 report the same gap. It is not chance: random 90-image subsets of our out-of-fold predictions have SD 0.012 and fall
 to $\le0.385$ with probability $<0.0003$. It is not mask width: the same masks eroded/dilated by 1\,px score
 0.37/0.35. It is not calibration: test maps differ from out-of-fold maps by ${\sim}1$\,\% in foreground fraction.
@@ -199,9 +200,11 @@ On one AMD Instinct MI300X, training 5 folds $\times$ 60 epochs takes 1.3\,h (M3
 and 6.0\,h (M4). Inference with 8 TTA views takes 0.46--0.72\,s per image and fold model. Post-processing and
 selection for 180 test images take 7\,s on 12 CPU workers.
 
+\begin{flushleft}
 Code, configurations, logs and the reproduction notebook are at \repourl. The final file is reproduced from the
-released weights by \texttt{submission\_package\_v3/notebook/reproduce\_v3.ipynb}. Training: \texttt{SETUP.md},
+released weights by \nolinkurl{submission_package_v3/notebook/reproduce_v3.ipynb}. Training: \texttt{SETUP.md},
 \texttt{scripts/run\_all\_v3.sh}; decisions: \texttt{DECISIONS.md}.
+\end{flushleft}
 
 \section*{Acknowledgment}
 This work uses DINOv3 (Meta) pretrained weights under the DINOv3 License, and GONG H$\alpha$ data from the NSO
