@@ -1,0 +1,27 @@
+{
+ "names": [
+  "r34_2048",
+  "effv2s_1536",
+  "m3_r34_1536_v3",
+  "m4_vitb_1536_v3"
+ ],
+ "weights": [
+  1.0,
+  1.0,
+  1.0,
+  0.0
+ ],
+ "selector": "/root/kaggle/work/selectors_v2/r34_2048+effv2s_1536+m3_r34_1536_v3+m4_vitb_1536_v3.pkl",
+ "threshold": 0.255,
+ "t_seed": 0.6,
+ "link": 8,
+ "min_area": 100,
+ "levels": [
+  0.4,
+  0.5,
+  0.6,
+  0.7
+ ],
+ "nested_pq": 0.44487556169873693,
+ "nested_pq_v1_extent": 0.4420685988150151
+}

@@ -1,0 +1,105 @@
+edges 1326 over 494 images, labelled 937 (mean target 0.702); 15s
+nested: Brier 0.1110 (constant predictor 0.1867), accuracy on unanimous pairs 0.840
+feature gain: path_min 692, seg_min 541, len_min 370, angle 198, pmean_min 185, width_max 154, align_min 148, width_min 122, contrast 119, area_min 118, path_s 116, seg_mean 102
+grouping check (exact additive PQ, best threshold on the mean probability, >= 100 px):
+       H1: PQ 0.4396 at mean >= 0.86  (5450 candidates)
+   H7@0.3: PQ 0.4392 at mean >= 0.86  (5056 candidates)
+   H7@0.4: PQ 0.4421 at mean >= 0.86  (5100 candidates)
+   H7@0.5: PQ 0.4433 at mean >= 0.86  (5148 candidates)
+   H7@0.6: PQ 0.4440 at mean >= 0.86  (5224 candidates)
+   H7@0.7: PQ 0.4425 at mean >= 0.86  (5314 candidates)
+saved /root/kaggle/work/linker_v3/r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1/linker.pkl
+oof: 15641 candidates over 705/707 images (47s on 12 workers); kept per family: {'H1': 5450, 'H3': 3276, 'H4': 2854, 'H2': 2759, 'H5': 857, 'H6': 273, 'H7@0.4': 167, 'H7@0.6': 5}
+oracle (greedy, true u > 0.24, overlap <= 10%)   H1: PQ=0.4965 SQ=0.6825 RQ=0.7275 TP=5008 FP=561 FN=3191
+oracle (greedy, true u > 0.26, overlap <= 10%) pool: PQ=0.5243 SQ=0.6843 RQ=0.7662 TP=5426 FP=538 FN=2773
+pool gain over H1 at best: +0.0278 (Lever B is worth keeping only if this is clearly positive); N_gt 8199
+test: 4048 candidates over 180/180 images (13s on 12 workers); kept per family: {'H1': 1401, 'H3': 876, 'H2': 749, 'H4': 699, 'H5': 220, 'H6': 63, 'H7@0.4': 38, 'H7@0.6': 2}
+15641 candidates (5450 from H1), 56 features, 705 images
+nested scorers fitted in 14s
+nested   v1: PQ=0.4442 SQ=0.6844 RQ=0.6491 TP=4792 FP=1775 FN=3407  at tau 0.24, rho 0.05
+nested pool: PQ=0.4477 SQ=0.6832 RQ=0.6553 TP=4985 FP=2031 FN=3214  at tau 0.23, rho 0.05
+oracle (true u): H1 0.4965  pool 0.5243
+v3 pool + scorer vs v1-style on the same maps: +0.0035
+feature gain: core90 6470, p90 2032, p_ring 1869, pool_n_overlap 1724, max 662, nn_dist 655, pool_max_iou 567, bbox_h 556, contrast 553, mean 497, base_iou 495, stability 335, major 323, base_mean 310, rho 299
+families of the selected candidates: H1 2171, H4 806, H2 695, H3 501, H5 97, H6 21, H7@0.4 13, H7@0.6 1
+saved /root/kaggle/work/pools_v3/r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1_linker/scorer
+[OOF] selection: 1 s for 707 images
+[OOF] wrote /root/kaggle/work/oof_sub_v3_r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1_linker.csv: 4305 filaments over 696/707 images (tau 0.23, rho 0.05)
+[OOF] OOF score from CSV, nested scorer (honest): PQ=0.4477 SQ=0.6832 RQ=0.6553 TP=4985 FP=2031 FN=3214
+selection: 0 s for 180 images
+wrote submissions/submission_v3_r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1_linker.csv: 1067 filaments over 179/180 images (tau 0.23, rho 0.05)
+[rubric]                         v3_r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1_linker
+[rubric] PQ                                                                     0.4477
+[rubric] SQ                                                                     0.6832
+[rubric] RQ                                                                     0.6553
+[rubric] TP                                                                  4985.0000
+[rubric] FP                                                                  2031.0000
+[rubric] FN                                                                  3214.0000
+[rubric] pairs_overlapping                                                   6586.0000
+[rubric] iou_mean                                                               0.5948
+[rubric] iou_median                                                             0.6463
+[rubric] dice_mean                                                              0.7261
+[rubric] dice_median                                                            0.7852
+[rubric] share_pairs_iou_gt_0.5                                                 0.7569
+[rubric] gt_to_pred (1:n)                                                       0.0301
+[rubric] pred_to_gt (n:1)                                                       0.0292
+[rubric] semantic_dice_mean                                                     0.6763
+[rubric] (rows '1:n' / 'n:1' show the share of filaments with 2 or more overlapping partners)
+[rubric] wrote /root/kaggle/work/eval_v3/summary.json and one figure per CSV
+[diag] ## v3_r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1_linker
+[diag] `/root/kaggle/work/oof_sub_v3_r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1_linker.csv`
+[diag] PQ **0.4477**  SQ 0.6832  RQ 0.6553  TP 4985  FP 2031  FN 3214
+[diag] ### PQ lost by cause
+[diag] | cause | count | PQ if removed | share |
+[diag] |---|---|---|---|
+[diag] | TP IoU deficit (SQ) | 4985 | +0.2076 | 55% |
+[diag] | FN missed | 1893 | +0.0636 | 17% |
+[diag] | FP merged_extent | 914 | +0.0286 | 8% |
+[diag] | FN extent | 764 | +0.0237 | 6% |
+[diag] | FP spurious | 648 | +0.0199 | 5% |
+[diag] | FP fragment | 469 | +0.0142 | 4% |
+[diag] | FN merged | 359 | +0.0108 | 3% |
+[diag] | FN fragmented | 198 | +0.0059 | 2% |
+[diag] ### By GT / prediction size (px)
+[diag] | group | PQ | GT | TP | FP | FN | recall | FN frag | FN merged | FN missed | FP spurious |
+[diag] |---|---|---|---|---|---|---|---|---|---|---|
+[diag] | 2k-8k | 0.5042 | 2245 | 1543 | 459 | 702 | 0.687 | 120 | 56 | 241 | 66 |
+[diag] | 500-2k | 0.4546 | 4390 | 2814 | 1188 | 1576 | 0.641 | 14 | 223 | 957 | 366 |
+[diag] | <500 | 0.2920 | 1263 | 449 | 357 | 814 | 0.356 | 0 | 79 | 676 | 213 |
+[diag] | >8k | 0.4959 | 301 | 179 | 27 | 122 | 0.595 | 64 | 1 | 19 | 3 |
+[diag] ### By radial zone r/R
+[diag] | group | PQ | GT | TP | FP | FN | recall | FN frag | FN merged | FN missed | FP spurious |
+[diag] |---|---|---|---|---|---|---|---|---|---|---|
+[diag] | 0.5-0.8 | 0.4548 | 4151 | 2612 | 1089 | 1539 | 0.629 | 116 | 188 | 818 | 320 |
+[diag] | >0.8 | 0.3648 | 954 | 428 | 231 | 526 | 0.449 | 8 | 22 | 414 | 114 |
+[diag] | r<0.5 | 0.4613 | 3094 | 1945 | 711 | 1149 | 0.629 | 74 | 149 | 661 | 214 |
+[diag] ### By instrument site
+[diag] | group | PQ | GT | TP | FP | FN | recall | FN frag | FN merged | FN missed | FP spurious |
+[diag] |---|---|---|---|---|---|---|---|---|---|---|
+[diag] | B | 0.4485 | 1502 | 911 | 375 | 591 | 0.607 | 31 | 69 | 346 | 133 |
+[diag] | C | 0.4423 | 1522 | 902 | 342 | 620 | 0.593 | 31 | 98 | 353 | 91 |
+[diag] | L | 0.4318 | 1438 | 859 | 431 | 579 | 0.597 | 49 | 59 | 327 | 139 |
+[diag] | M | 0.4569 | 1298 | 813 | 309 | 485 | 0.626 | 41 | 42 | 282 | 74 |
+[diag] | T | 0.4536 | 1369 | 826 | 299 | 543 | 0.603 | 18 | 56 | 348 | 110 |
+[diag] | U | 0.4570 | 1070 | 674 | 275 | 396 | 0.630 | 28 | 35 | 237 | 101 |
+[diag] ### By annotation sets per image
+[diag] | group | PQ | GT | TP | FP | FN | recall | FN frag | FN merged | FN missed | FP spurious |
+[diag] |---|---|---|---|---|---|---|---|---|---|---|
+[diag] | 1 | 0.4443 | 3206 | 1846 | 664 | 1360 | 0.576 | 75 | 142 | 893 | 179 |
+[diag] | 2 | 0.4631 | 1987 | 1271 | 489 | 716 | 0.640 | 49 | 85 | 415 | 169 |
+[diag] | 3 | 0.4411 | 3006 | 1868 | 878 | 1138 | 0.621 | 74 | 132 | 585 | 300 |
+[diag] ### Overlap degrees (1:n = predictions per GT, n:1 = GTs per prediction)
+[diag] | overlapping partners | GT filaments (1:n) | predictions (n:1) |
+[diag] |---|---|---|
+[diag] | 0 | 1893 | 648 |
+[diag] | 1 | 6061 | 6166 |
+[diag] | 2 | 216 | 188 |
+[diag] | 3+ | 29 | 13 |
+[diag] ### Decision (blueprint section 14)
+[diag] fragmented + merged share of the lost PQ: **8%** -> M4 (query-based proposals) stays optional; largest lever: A (pixel quality / SQ). 
+[diag] wrote /root/kaggle/work/diag_v3
+-- paired bootstrap vs oof_sub_v2_r34_1024+rgy040_1024+r34_1536+r34_2048+effv2s_1536.csv
+A oof_sub_v2_r34_1024+rgy040_1024+r34_1536+r34_2048+effv2s_1536.csv: PQ 0.4438
+B oof_sub_v3_r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1_linker.csv: PQ 0.4477
+delta B-A +0.0039  bootstrap mean +0.0039  90% CI [+0.0009, +0.0069]  P(delta>0) 0.984  (2000 resamples of 707 images)
+gate (mean delta >= +0.003 and P(delta>0) >= 0.90): ADOPT B (delta < 0.008: confirm with a second seed if this is an architecture/loss change)

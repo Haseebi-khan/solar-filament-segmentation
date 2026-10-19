@@ -1,0 +1,31 @@
+== v2 final: members r34_2048 effv2s_1536 m3_r34_1536_v3 m4_vitb_1536_v3 m5_cnxs_1536_v3  weights 1 1 0 0 1  morph 0
+filaments 5450  hypotheses 21732  levels [0.4, 0.5, 0.6, 0.7]  N_gt 8199
+oracle (true u): v1 extent only 0.4965   best level per filament 0.5186
+nested CV, v1 extent only: PQ 0.4447 at threshold 0.24
+nested CV, v2 selector:    PQ 0.4455 at threshold 0.23   (+0.0008 vs v1 extent)
+levels chosen for kept filaments: 0.4: 1747, 0.5: 1075, 0.6: 856, 0.7: 697
+feature gain: base_mean 11087, base_core80 3062, p_ring 2431, nn_dist 1408, contrast 967, core90 934, base_p90 842, bbox_h 790, mean 567, major 513, max 512, fill 484
+saved /root/kaggle/work/selectors_v2/r34_2048+effv2s_1536+m3_r34_1536_v3+m4_vitb_1536_v3+m5_cnxs_1536_v3.pkl and /root/kaggle/work/selectors_v2/r34_2048+effv2s_1536+m3_r34_1536_v3+m4_vitb_1536_v3+m5_cnxs_1536_v3_config.json
+[OOF] post-processing: 25 s for 707 images on 12 workers
+[OOF] wrote /root/kaggle/work/oof_sub_v2_r34_2048+effv2s_1536+m3_r34_1536_v3+m4_vitb_1536_v3+m5_cnxs_1536_v3.csv: 4375 filaments over 697/707 images
+[OOF] OOF score from CSV, nested selector (honest): PQ=0.4455 SQ=0.6827 RQ=0.6525 TP=4999 FP=2125 FN=3200
+[rubric]                         v2_r34_2048+effv2s_1536+m3_r34_1536_v3+m4_vitb_1536_v3+m5_cnxs_1536_v3
+[rubric] PQ                                                                                      0.4455
+[rubric] SQ                                                                                      0.6827
+[rubric] RQ                                                                                      0.6525
+[rubric] TP                                                                                   4999.0000
+[rubric] FP                                                                                   2125.0000
+[rubric] FN                                                                                   3200.0000
+[rubric] pairs_overlapping                                                                    6680.0000
+[rubric] iou_mean                                                                                0.5908
+[rubric] iou_median                                                                              0.6441
+[rubric] dice_mean                                                                               0.7223
+[rubric] dice_median                                                                             0.7836
+[rubric] share_pairs_iou_gt_0.5                                                                  0.7484
+[rubric] gt_to_pred (1:n)                                                                        0.0324
+[rubric] pred_to_gt (n:1)                                                                        0.0313
+[rubric] semantic_dice_mean                                                                      0.6772
+[rubric] (rows '1:n' / 'n:1' show the share of filaments with 2 or more overlapping partners)
+[rubric] wrote /root/kaggle/work/eval_v2/summary.json and one figure per CSV
+post-processing: 7 s for 180 images on 12 workers
+wrote submissions/submission_v3_rescorer_teachers.csv: 1083 filaments over 177/180 images

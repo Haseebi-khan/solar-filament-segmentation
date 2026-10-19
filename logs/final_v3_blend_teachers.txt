@@ -1,0 +1,27 @@
+== blend search over r34_2048 effv2s_1536 m3_r34_1536_v3 m4_vitb_1536_v3 m5_cnxs_1536_v3
+weights 1 1 1 1 1: PQ 0.4360
+weights 1 1 1 2 2: PQ 0.4349
+weights 1 0 0 0 0: PQ 0.4331
+weights 0 1 0 0 0: PQ 0.4355
+weights 0 0 1 0 0: PQ 0.4131
+weights 0 0 0 1 0: PQ 0.4268
+weights 0 0 0 0 1: PQ 0.4303
+weights 0 1 1 1 1: PQ 0.4335
+weights 1 0 1 1 1: PQ 0.4344
+weights 1 1 0 1 1: PQ 0.4395
+weights 1 1 1 0 1: PQ 0.4372
+weights 1 1 1 1 0: PQ 0.4350
+weights 2 1 0 1 1: PQ 0.4385
+weights 0 1 0 1 1: PQ 0.4368
+weights 1 2 0 1 1: PQ 0.4388
+weights 1 0 0 1 1: PQ 0.4373
+weights 1 1 0 2 1: PQ 0.4378
+weights 1 1 0 0 1: PQ 0.4398
+weights 1 1 0 1 2: PQ 0.4384
+weights 1 1 0 1 0: PQ 0.4365
+weights 2 1 0 0 1: PQ 0.4397
+weights 0 1 0 0 1: PQ 0.4382
+weights 1 2 0 0 1: PQ 0.4394
+weights 1 0 0 0 1: PQ 0.4381
+best PQ 0.4398
+BEST 1 1 0 0 1

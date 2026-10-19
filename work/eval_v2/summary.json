@@ -1,34 +1,34 @@
 {
- "v2_r34_2048+effv2s_1536+m3_r34_1536_v3": {
-  "PQ": 0.4449,
-  "SQ": 0.6822,
-  "RQ": 0.6521,
-  "TP": 4906,
-  "FP": 1942,
-  "FN": 3293,
-  "pairs_overlapping": 6508,
-  "iou_mean": 0.5914,
-  "iou_median": 0.645,
-  "dice_mean": 0.7227,
-  "dice_median": 0.7842,
-  "share_pairs_iou_gt_0.5": 0.7538,
+ "v2_r34_2048+effv2s_1536+m3_r34_1536_v3+m4_vitb_1536_v3+m5_cnxs_1536_v3": {
+  "PQ": 0.4455,
+  "SQ": 0.6827,
+  "RQ": 0.6525,
+  "TP": 4999,
+  "FP": 2125,
+  "FN": 3200,
+  "pairs_overlapping": 6680,
+  "iou_mean": 0.5908,
+  "iou_median": 0.6441,
+  "dice_mean": 0.7223,
+  "dice_median": 0.7836,
+  "share_pairs_iou_gt_0.5": 0.7484,
   "gt_to_pred (1:n)": {
-   "0": 1969,
-   "1": 5982,
-   "2": 220,
-   "3+": 28,
-   "share_1": 0.7296,
-   "share_2plus": 0.0302
+   "0": 1818,
+   "1": 6115,
+   "2": 235,
+   "3+": 31,
+   "share_1": 0.7458,
+   "share_2plus": 0.0324
   },
   "pred_to_gt (n:1)": {
-   "0": 582,
-   "1": 6040,
-   "2": 208,
-   "3+": 17,
-   "share_1": 0.8821,
-   "share_2plus": 0.0329
+   "0": 683,
+   "1": 6217,
+   "2": 207,
+   "3+": 16,
+   "share_1": 0.8728,
+   "share_2plus": 0.0313
   },
-  "semantic_dice_mean": 0.6727,
-  "csv": "/root/kaggle/work/oof_sub_v2_r34_2048+effv2s_1536+m3_r34_1536_v3.csv"
+  "semantic_dice_mean": 0.6772,
+  "csv": "/root/kaggle/work/oof_sub_v2_r34_2048+effv2s_1536+m3_r34_1536_v3+m4_vitb_1536_v3+m5_cnxs_1536_v3.csv"
  }
 }
