@@ -1,0 +1,10 @@
+edges 1326 over 494 images, labelled 937 (mean target 0.702); 15s
+nested: Brier 0.1110 (constant predictor 0.1867), accuracy on unanimous pairs 0.840
+feature gain: path_min 692, seg_min 541, len_min 370, angle 198, pmean_min 185, width_max 154, align_min 148, width_min 122, contrast 119, area_min 118, path_s 116, seg_mean 102
+grouping check (exact additive PQ, best threshold on the mean probability, >= 100 px):
+       H1: PQ 0.4396 at mean >= 0.86  (5450 candidates)
+   H7@0.3: PQ 0.4392 at mean >= 0.86  (5056 candidates)
+   H7@0.4: PQ 0.4421 at mean >= 0.86  (5100 candidates)
+   H7@0.5: PQ 0.4433 at mean >= 0.86  (5148 candidates)
+   H7@0.6: PQ 0.4440 at mean >= 0.86  (5224 candidates)
+   H7@0.7: PQ 0.4425 at mean >= 0.86  (5314 candidates)

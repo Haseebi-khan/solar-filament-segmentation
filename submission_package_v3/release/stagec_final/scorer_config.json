@@ -1,0 +1,37 @@
+{
+ "pool": "/root/kaggle/work/pools_v3/r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1_linker",
+ "scorer": "/root/kaggle/work/pools_v3/r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1_linker/scorer/scorer.pkl",
+ "tau": 0.23,
+ "rho": 0.05,
+ "min_keep": 30,
+ "nested_pq": 0.4476950898155891,
+ "nested_pq_v1_style": 0.4442387628517981,
+ "names": [
+  "r34_2048",
+  "effv2s_1536",
+  "m3_r34_1536_v3",
+  "m4_vitb_1536_v3",
+  "m5_cnxs_1536_v3"
+ ],
+ "weights": [
+  1.0,
+  1.0,
+  0.0,
+  0.0,
+  1.0
+ ],
+ "families": [
+  "H1",
+  "H2",
+  "H3",
+  "H4",
+  "H5",
+  "H6"
+ ],
+ "link_taus": [
+  0.4,
+  0.6
+ ],
+ "linker": "/root/kaggle/work/linker_v3/r34_2048+effv2s_1536+m5_cnxs_1536_v3_w1-1-1/linker.pkl",
+ "min_area": 100
+}
