@@ -11,11 +11,11 @@ Kaggle team **"Umer Gulzar"** (haseebekhan, umergulzar). Public score **0.39** (
 | 2 | Reproduction from the weights verified | **done**: 1,061 / 1,067 masks bit-identical, the rest IoU >= 0.95 |
 | 3 | Code on GitHub (Haseeb pushes, Umer merges) | **done** |
 | 4 | Kaggle: select the final submissions | **you** (2 min) |
-| 5 | GitHub release with the M5 weights | **you** (zip is ready on the server) |
-| 6 | Make the repository public | **you** (1 min) |
+| 5 | GitHub release with the M5 weights | **you**: zip downloaded; release `v3-final` not created yet (checked 19 Oct, 06:10 UTC) |
+| 6 | Make the repository public | **done**: public; every key file on GitHub verified byte-identical to `master` |
 | 7 | Report: e-mails in `main.tex`, compile in the organisers' Overleaf, download the PDF | **you** (10 min) |
 | 8 | Google form | **you** |
-| 9 | Shut down the GPU server | **you** |
+| 9 | Shut down the GPU server | **you**: nothing left that needs it (steps 4, 5, 7, 8 run in the browser) |
 
 ## What is in this folder
 
@@ -39,7 +39,7 @@ https://www.kaggle.com/competitions/filament-segmentation-2026/submissions: tick
 
 ## Step 5. GitHub release with the M5 weights
 
-1. VS Code Explorer, `release_v3/`: right-click `m5_cnxs_1536_v3_weights.zip`, **Download...**; the same for the `.sha256`.
+1. Use the `m5_cnxs_1536_v3_weights.zip` and `.sha256` you downloaded (SHA-256 `99cd9c52c20a2957c23097123704dfb93fe056d6576b52459f5aece224ce50dc`).
 2. As **umerkang66**: https://github.com/umerkang66/solar-filament-segmentation/releases/new
    - **Choose a tag**: type `v3-final`, then **Create new tag: v3-final on publish**. Target: `master`.
    - **Title**: `v3 final submission weights`
