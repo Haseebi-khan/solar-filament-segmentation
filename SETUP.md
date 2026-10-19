@@ -48,7 +48,7 @@ sha256sum -c m5_cnxs_1536_v3_weights.zip.sha256
 ls work/models/m5_cnxs_1536_v3/          # fold0.pt ... fold4.pt, LICENSE_DINOv3.md
 ```
 
-The DINOv3 checkpoints are covered by the DINOv3 License (`submission_package_v3/release/LICENSE_DINOv3.md`).
+The DINOv3 checkpoints are covered by Meta's DINOv3 License ([LICENSE_DINOv3.md](LICENSE_DINOv3.md) in the repository root).
 
 ## 3. Python environment
 

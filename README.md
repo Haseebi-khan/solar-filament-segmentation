@@ -74,7 +74,8 @@ most likely cause is an annotator shift.
 * Masks are disjoint (checked by every submission writer); there are no duplicate masks and no leaderboard tuning.
 * Competition data: CC BY-NC 4.0, not included (download instructions in SETUP.md). Pretrained weights: ImageNet
   (timm / segmentation_models_pytorch) and DINOv3 (Meta). The fine-tuned DINOv3 checkpoints are covered by the
-  DINOv3 License; see [submission_package_v3/release/LICENSE_DINOv3.md](submission_package_v3/release/LICENSE_DINOv3.md).
+  [DINOv3 License](LICENSE_DINOv3.md) (Meta, official text). It applies to the DINOv3-based checkpoints (M4, M5)
+  and is also included in the M5 release zip, as the licence requires for redistributed derivatives.
 
 ## Weights
 
@@ -96,6 +97,7 @@ logs/final_*.txt     final scores of every stage
 submissions/         every submission file (the final one is also in submission_package_v3/kaggle/)
 submission_package_v3/   everything handed in: CSV, LaTeX report, reproduction notebook, release tools
 REPORT.md  SETUP.md  DECISIONS.md  V3.md (v3 runbook)
+LICENSE_DINOv3.md    Meta's DINOv3 License (DINOv3-based checkpoints)
 ```
 
 ## Quick start
